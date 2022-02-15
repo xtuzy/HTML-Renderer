@@ -38,12 +38,12 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         /// <summary>
         /// collection of all installed and added font families to check if font exists
         /// </summary>
-        private readonly Dictionary<string, RFontFamily> _existingFontFamilies = new Dictionary<string, RFontFamily>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly Dictionary<string, IRFontFamily> _existingFontFamilies = new Dictionary<string, IRFontFamily>(StringComparer.InvariantCultureIgnoreCase);
 
         /// <summary>
         /// cache of all the font used not to create same font again and again
         /// </summary>
-        private readonly Dictionary<string, Dictionary<double, Dictionary<RFontStyle, RFont>>> _fontsCache = new Dictionary<string, Dictionary<double, Dictionary<RFontStyle, RFont>>>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly Dictionary<string, Dictionary<double, Dictionary<RFontStyle, IRFont>>> _fontsCache = new Dictionary<string, Dictionary<double, Dictionary<RFontStyle, IRFont>>>(StringComparer.InvariantCultureIgnoreCase);
 
         #endregion
 
@@ -81,11 +81,11 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         /// Adds a font family to be used.
         /// </summary>
         /// <param name="fontFamily">The font family to add.</param>
-        public void AddFontFamily(RFontFamily fontFamily)
+        public void AddFontFamily(IRFontFamily fontFamily)
         {
             ArgChecker.AssertArgNotNull(fontFamily, "family");
 
-            _existingFontFamilies[fontFamily.Name] = fontFamily;
+            _existingFontFamilies[fontFamily.FontName] = fontFamily;
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         /// Improve performance not to create same font multiple times.
         /// </summary>
         /// <returns>cached font instance</returns>
-        public RFont GetCachedFont(string family, double size, RFontStyle style)
+        public IRFont GetCachedFont(string family, double size, RFontStyle style)
         {
             var font = TryGetFont(family, size, style);
             if (font == null)
@@ -143,9 +143,9 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         /// <summary>
         /// Get cached font if it exists in cache or null if it is not.
         /// </summary>
-        private RFont TryGetFont(string family, double size, RFontStyle style)
+        private IRFont TryGetFont(string family, double size, RFontStyle style)
         {
-            RFont font = null;
+            IRFont font = null;
             if (_fontsCache.ContainsKey(family))
             {
                 var a = _fontsCache[family];
@@ -159,13 +159,13 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
                 }
                 else
                 {
-                    _fontsCache[family][size] = new Dictionary<RFontStyle, RFont>();
+                    _fontsCache[family][size] = new Dictionary<RFontStyle, IRFont>();
                 }
             }
             else
             {
-                _fontsCache[family] = new Dictionary<double, Dictionary<RFontStyle, RFont>>();
-                _fontsCache[family][size] = new Dictionary<RFontStyle, RFont>();
+                _fontsCache[family] = new Dictionary<double, Dictionary<RFontStyle, IRFont>>();
+                _fontsCache[family][size] = new Dictionary<RFontStyle, IRFont>();
             }
             return font;
         }
@@ -173,9 +173,9 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         /// <summary>
         // create font (try using existing font family to support custom fonts)
         /// </summary>
-        private RFont CreateFont(string family, double size, RFontStyle style)
+        private IRFont CreateFont(string family, double size, RFontStyle style)
         {
-            RFontFamily fontFamily;
+            IRFontFamily fontFamily;
             try
             {
                 return _existingFontFamilies.TryGetValue(family, out fontFamily)

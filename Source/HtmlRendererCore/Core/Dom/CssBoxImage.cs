@@ -58,7 +58,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
         /// <summary>
         /// Get the image of this image box.
         /// </summary>
-        public RImage Image
+        public IRImage Image
         {
             get { return _imageWord.Image; }
         }
@@ -184,7 +184,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
         /// <param name="image">the image loaded or null if failed</param>
         /// <param name="rectangle">the source rectangle to draw in the image (empty - draw everything)</param>
         /// <param name="async">is the callback was called async to load image call</param>
-        private void OnLoadImageComplete(RImage image, RRect rectangle, bool async)
+        private void OnLoadImageComplete(IRImage image, RRect rectangle, bool async)
         {
             _imageWord.Image = image;
             _imageWord.ImageRectangle = rectangle;

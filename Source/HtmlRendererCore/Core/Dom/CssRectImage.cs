@@ -25,7 +25,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
         /// <summary>
         /// the image object if it is image word (can be null if not loaded)
         /// </summary>
-        private RImage _image;
+        private IRImage _image;
 
         /// <summary>
         /// the image rectangle restriction as returned from image load event
@@ -46,7 +46,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
         /// <summary>
         /// Gets the image this words represents (if one exists)
         /// </summary>
-        public override RImage Image
+        public override IRImage Image
         {
             get { return _image; }
             set { _image = value; }

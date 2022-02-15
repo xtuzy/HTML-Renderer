@@ -18,7 +18,7 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
     /// <summary>
     /// Adapter for WPF Font.
     /// </summary>
-    internal sealed class FontAdapter : RFont
+    internal sealed class FontAdapter : IRFont
     {
         #region Fields and Consts
 
@@ -93,27 +93,28 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
             get { return _glyphTypeface; }
         }
 
-        public override double Size
+        #region interface
+        public double FontSize
         {
             get { return _size; }
         }
 
-        public override double UnderlineOffset
+        public  double UnderlineOffset
         {
             get { return _underlineOffset; }
         }
 
-        public override double Height
+        public  double FontHeight
         {
             get { return _height; }
         }
 
-        public override double LeftPadding
+        public  double FontLeftPadding
         {
             get { return _height / 6f; }
         }
 
-        public override double GetWhitespaceWidth(RGraphics graphics)
+        public  double GetWhitespaceWidth(RGraphics graphics)
         {
             if (_whitespaceWidth < 0)
             {
@@ -121,5 +122,6 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
             }
             return _whitespaceWidth;
         }
+        #endregion
     }
 }

@@ -124,7 +124,7 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp
         /// Element that is rendered at location (50,100) with offset of (0,200) will not be rendered as it
         /// will be at -100 therefore outside the client rectangle.
         /// </example>
-        public XPoint ScrollOffset
+        public SKPoint ScrollOffset
         {
             get { return Utils.Convert(_htmlContainerInt.ScrollOffset); }
             set { _htmlContainerInt.ScrollOffset = Utils.Convert(value); }
@@ -134,7 +134,7 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp
         /// The top-left most location of the rendered html.<br/>
         /// This will offset the top-left corner of the rendered html.
         /// </summary>
-        public XPoint Location
+        public SKPoint Location
         {
             get { return Utils.Convert(_htmlContainerInt.Location); }
             set { _htmlContainerInt.Location = Utils.Convert(value); }
@@ -147,7 +147,7 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp
         /// <see cref="ActualSize"/> can be exceed the max size by layout restrictions (unwrappable line, set image size, etc.).<br/>
         /// Set zero for unlimited (width\height separately).<br/>
         /// </summary>
-        public XSize MaxSize
+        public SKSize MaxSize
         {
             get { return Utils.Convert(_htmlContainerInt.MaxSize); }
             set { _htmlContainerInt.MaxSize = Utils.Convert(value); }
@@ -156,16 +156,16 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp
         /// <summary>
         /// The actual size of the rendered html (after layout)
         /// </summary>
-        public XSize ActualSize
+        public SKSize ActualSize
         {
             get { return Utils.Convert(_htmlContainerInt.ActualSize); }
             internal set { _htmlContainerInt.ActualSize = Utils.Convert(value); }
         }
 
-        public XSize PageSize {
+        public SKSize SKSize {
             get
             {
-                return new XSize((float)_htmlContainerInt.PageSize.Width, (float)_htmlContainerInt.PageSize.Height);
+                return new SKSize((float)_htmlContainerInt.PageSize.Width, (float)_htmlContainerInt.PageSize.Height);
             }
             set
             {
@@ -278,7 +278,7 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp
         /// <param name="location">the location to find the attribute at</param>
         /// <param name="attribute">the attribute key to get value by</param>
         /// <returns>found attribute value or null if not found</returns>
-        public string GetAttributeAt(XPoint location, string attribute)
+        public string GetAttributeAt(SKPoint location, string attribute)
         {
             return _htmlContainerInt.GetAttributeAt(Utils.Convert(location), attribute);
         }
@@ -287,12 +287,12 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp
         /// Get all the links in the HTML with the element rectangle and href data.
         /// </summary>
         /// <returns>collection of all the links in the HTML</returns>
-        public List<LinkElementData<XRect>> GetLinks()
+        public List<LinkElementData<SKRect>> GetLinks()
         {
-            var linkElements = new List<LinkElementData<XRect>>();
+            var linkElements = new List<LinkElementData<SKRect>>();
             foreach (var link in HtmlContainerInt.GetLinks())
             {
-                linkElements.Add(new LinkElementData<XRect>(link.Id, link.Href, Utils.Convert(link.Rectangle)));
+                linkElements.Add(new LinkElementData<SKRect>(link.Id, link.Href, Utils.Convert(link.Rectangle)));
             }
             return linkElements;
         }
@@ -302,7 +302,7 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp
         /// </summary>
         /// <param name="location">the location to find the link at</param>
         /// <returns>css link href if exists or null</returns>
-        public string GetLinkAt(XPoint location)
+        public string GetLinkAt(SKPoint location)
         {
             return _htmlContainerInt.GetLinkAt(Utils.Convert(location));
         }
@@ -314,17 +314,17 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp
         /// </summary>
         /// <param name="elementId">the id of the element to get its rectangle</param>
         /// <returns>the rectangle of the element or null if not found</returns>
-        public XRect? GetElementRectangle(string elementId)
+        public SKRect? GetElementRectangle(string elementId)
         {
             var r = _htmlContainerInt.GetElementRectangle(elementId);
-            return r.HasValue ? Utils.Convert(r.Value) : (XRect?)null;
+            return r.HasValue ? Utils.Convert(r.Value) : (SKRect?)null;
         }
 
         /// <summary>
         /// Measures the bounds of box and children, recursively.
         /// </summary>
         /// <param name="g">Device context to draw</param>
-        public void PerformLayout(XGraphics g)
+        public void PerformLayout(SKCanvas g)
         {
             ArgChecker.AssertArgNotNull(g, "g");
 
@@ -338,7 +338,7 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp
         /// Render the html using the given device.
         /// </summary>
         /// <param name="g">the device to use to render</param>
-        public void PerformPaint(XGraphics g)
+        public void PerformPaint(SKCanvas g)
         {
             ArgChecker.AssertArgNotNull(g, "g");
 

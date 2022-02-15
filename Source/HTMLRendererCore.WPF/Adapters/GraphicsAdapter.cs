@@ -98,7 +98,7 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
         public override void ReturnPreviousSmoothingMode(Object prevMode)
         { }
 
-        public override RSize MeasureString(string str, RFont font)
+        public override RSize MeasureString(string str, IRFont font)
         {
             double width = 0;
             GlyphTypeface glyphTypeface = ((FontAdapter)font).GlyphTypeface;
@@ -122,14 +122,14 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
 
             if (width <= 0)
             {
-                var formattedText = new FormattedText(str, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, ((FontAdapter)font).Font, 96d / 72d * font.Size, Brushes.Red);
+                var formattedText = new FormattedText(str, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, ((FontAdapter)font).Font, 96d / 72d * font.FontSize, Brushes.Red);
                 return new RSize(formattedText.WidthIncludingTrailingWhitespace, formattedText.Height);
             }
 
-            return new RSize(width * font.Size * 96d / 72d, font.Height);
+            return new RSize(width * font.FontSize * 96d / 72d, font.FontHeight);
         }
 
-        public override void MeasureString(string str, RFont font, double maxWidth, out int charFit, out double charFitWidth)
+        public override void MeasureString(string str, IRFont font, double maxWidth, out int charFit, out double charFitWidth)
         {
             charFit = 0;
             charFitWidth = 0;
@@ -144,7 +144,7 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
                     if (glyphTypeface.CharacterToGlyphMap.ContainsKey(str[i]))
                     {
                         ushort glyph = glyphTypeface.CharacterToGlyphMap[str[i]];
-                        double advanceWidth = glyphTypeface.AdvanceWidths[glyph] * font.Size * 96d / 72d;
+                        double advanceWidth = glyphTypeface.AdvanceWidths[glyph] * font.FontSize * 96d / 72d;
 
                         if (!(width + advanceWidth < maxWidth))
                         {
@@ -164,13 +164,13 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
 
             if (!handled)
             {
-                var formattedText = new FormattedText(str, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, ((FontAdapter)font).Font, 96d / 72d * font.Size, Brushes.Red);
+                var formattedText = new FormattedText(str, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, ((FontAdapter)font).Font, 96d / 72d * font.FontSize, Brushes.Red);
                 charFit = str.Length;
                 charFitWidth = formattedText.WidthIncludingTrailingWhitespace;
             }
         }
 
-        public override void DrawString(string str, RFont font, RColor color, RPoint point, RSize size, bool rtl)
+        public override void DrawString(string str, IRFont font, RColor color, RPoint point, RSize size, bool rtl)
         {
             var colorConv = ((BrushAdapter)_adapter.GetSolidBrush(color)).Brush;
 
@@ -191,29 +191,29 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
 
                     glyphs[i] = glyph;
                     width += glyphTypeface.AdvanceWidths[glyph];
-                    widths[i] = 96d / 72d * font.Size * glyphTypeface.AdvanceWidths[glyph];
+                    widths[i] = 96d / 72d * font.FontSize * glyphTypeface.AdvanceWidths[glyph];
                 }
 
                 if (i >= str.Length)
                 {
-                    point.Y += glyphTypeface.Baseline * font.Size * 96d / 72d;
-                    point.X += rtl ? 96d / 72d * font.Size * width : 0;
+                    point.Y += glyphTypeface.Baseline * font.FontSize * 96d / 72d;
+                    point.X += rtl ? 96d / 72d * font.FontSize * width : 0;
 
                     glyphRendered = true;
-                    var glyphRun = new GlyphRun(glyphTypeface, rtl ? 1 : 0, false, 96d / 72d * font.Size, glyphs, Utils.ConvertRound(point), widths, null, null, null, null, null, null);
+                    var glyphRun = new GlyphRun(glyphTypeface, rtl ? 1 : 0, false, 96d / 72d * font.FontSize, glyphs, Utils.ConvertRound(point), widths, null, null, null, null, null, null);
                     _g.DrawGlyphRun(colorConv, glyphRun);
                 }
             }
 
             if (!glyphRendered)
             {
-                var formattedText = new FormattedText(str, CultureInfo.CurrentCulture, rtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight, ((FontAdapter)font).Font, 96d / 72d * font.Size, colorConv);
+                var formattedText = new FormattedText(str, CultureInfo.CurrentCulture, rtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight, ((FontAdapter)font).Font, 96d / 72d * font.FontSize, colorConv);
                 point.X += rtl ? formattedText.Width : 0;
                 _g.DrawText(formattedText, Utils.ConvertRound(point));
             }
         }
 
-        public override RBrush GetTextureBrush(RImage image, RRect dstRect, RPoint translateTransformLocation)
+        public override IRBrush GetTextureBrush(IRImage image, RRect dstRect, RPoint translateTransformLocation)
         {
             var brush = new ImageBrush(((ImageAdapter)image).Image);
             brush.Stretch = Stretch.None;
@@ -225,7 +225,7 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
             return new BrushAdapter(brush);
         }
 
-        public override RGraphicsPath GetGraphicsPath()
+        public override IRGraphicsPath GetGraphicsPath()
         {
             return new GraphicsPathAdapter();
         }
@@ -239,14 +239,14 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
 
         #region Delegate graphics methods
 
-        public override void DrawLine(RPen pen, double x1, double y1, double x2, double y2)
+        public override void DrawLine(IRPen pen, double x1, double y1, double x2, double y2)
         {
             x1 = (int)x1;
             x2 = (int)x2;
             y1 = (int)y1;
             y2 = (int)y2;
 
-            var adj = pen.Width;
+            var adj = pen.PenWidth;
             if (Math.Abs(x1 - x2) < .1 && Math.Abs(adj % 2 - 1) < .1)
             {
                 x1 += .5;
@@ -261,9 +261,9 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
             _g.DrawLine(((PenAdapter)pen).CreatePen(), new Point(x1, y1), new Point(x2, y2));
         }
 
-        public override void DrawRectangle(RPen pen, double x, double y, double width, double height)
+        public override void DrawRectangle(IRPen pen, double x, double y, double width, double height)
         {
-            var adj = pen.Width;
+            var adj = pen.PenWidth;
             if (Math.Abs(adj % 2 - 1) < .1)
             {
                 x += .5;
@@ -273,33 +273,33 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
             _g.DrawRectangle(null, ((PenAdapter)pen).CreatePen(), new Rect(x, y, width, height));
         }
 
-        public override void DrawRectangle(RBrush brush, double x, double y, double width, double height)
+        public override void DrawRectangle(IRBrush brush, double x, double y, double width, double height)
         {
             _g.DrawRectangle(((BrushAdapter)brush).Brush, null, new Rect(x, y, width, height));
         }
 
-        public override void DrawImage(RImage image, RRect destRect, RRect srcRect)
+        public override void DrawImage(IRImage image, RRect destRect, RRect srcRect)
         {
             CroppedBitmap croppedImage = new CroppedBitmap(((ImageAdapter)image).Image, new Int32Rect((int)srcRect.X, (int)srcRect.Y, (int)srcRect.Width, (int)srcRect.Height));
             _g.DrawImage(croppedImage, Utils.ConvertRound(destRect));
         }
 
-        public override void DrawImage(RImage image, RRect destRect)
+        public override void DrawImage(IRImage image, RRect destRect)
         {
             _g.DrawImage(((ImageAdapter)image).Image, Utils.ConvertRound(destRect));
         }
 
-        public override void DrawPath(RPen pen, RGraphicsPath path)
+        public override void DrawPath(IRPen pen, IRGraphicsPath path)
         {
             _g.DrawGeometry(null, ((PenAdapter)pen).CreatePen(), ((GraphicsPathAdapter)path).GetClosedGeometry());
         }
 
-        public override void DrawPath(RBrush brush, RGraphicsPath path)
+        public override void DrawPath(IRBrush brush, IRGraphicsPath path)
         {
             _g.DrawGeometry(((BrushAdapter)brush).Brush, null, ((GraphicsPathAdapter)path).GetClosedGeometry());
         }
 
-        public override void DrawPolygon(RBrush brush, RPoint[] points)
+        public override void DrawPolygon(IRBrush brush, RPoint[] points)
         {
             if (points != null && points.Length > 0)
             {

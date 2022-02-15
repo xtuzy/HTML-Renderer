@@ -1,16 +1,13 @@
-﻿global using XFontFamily = SkiaSharp.SKTypeface;
-global using XFont = SkiaSharp.SKTypeface;
-global using XRect = SkiaSharp.SKRect;
-global using XSize = SkiaSharp.SKSize;
-global using PageSize = SkiaSharp.SKSize;
-global using XPoint = SkiaSharp.SKPoint;
-global using XPen = SkiaSharp.SKPaint;
-global using XGraphics = SkiaSharp.SKCanvas;
-global using XColor = SkiaSharp.SKColor;
-global using Color = SkiaSharp.SKColor;
-global using XGraphicsPath = SkiaSharp.SKPath;
-global using XImage = SkiaSharp.SKBitmap;
-global using XBrush = SkiaSharp.SKShader;
+﻿global using SKTypeface = SkiaSharp.SKTypeface;
+global using SKRect = SkiaSharp.SKRect;
+global using SKSize = SkiaSharp.SKSize;
+global using SKPoint = SkiaSharp.SKPoint;
+global using SKPaint = SkiaSharp.SKPaint;
+global using SKCanvas = SkiaSharp.SKCanvas;
+global using SKColor = SkiaSharp.SKColor;
+global using SKPath = SkiaSharp.SKPath;
+global using SKBitmap = SkiaSharp.SKBitmap;
+global using SKShader = SkiaSharp.SKShader;
 
 namespace HtmlRenderer.Skia
 {

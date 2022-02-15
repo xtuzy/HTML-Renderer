@@ -19,7 +19,7 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
     /// <summary>
     /// Adapter for WPF graphics path object for core.
     /// </summary>
-    internal sealed class GraphicsPathAdapter : RGraphicsPath
+    internal sealed class GraphicsPathAdapter : IRGraphicsPath
     {
         /// <summary>
         /// The actual WPF graphics geometry instance.
@@ -35,18 +35,18 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
         {
             _geometryContext = _geometry.Open();
         }
-
-        public override void Start(double x, double y)
+        #region interface
+        public void StartPath(double x, double y)
         {
             _geometryContext.BeginFigure(new Point(x, y), true, false);
         }
 
-        public override void LineTo(double x, double y)
+        public  void LineTo(double x, double y)
         {
             _geometryContext.LineTo(new Point(x, y), true, true);
         }
 
-        public override void ArcTo(double x, double y, double size, Corner corner)
+        public  void ArcTo(double x, double y, double size, IRGraphicsPath.Corner corner)
         {
             _geometryContext.ArcTo(new Point(x, y), new Size(size, size), 0, false, SweepDirection.Clockwise, true, true);
         }
@@ -61,7 +61,8 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
             return _geometry;
         }
 
-        public override void Dispose()
+        public  void Dispose()
         { }
+        #endregion
     }
 }

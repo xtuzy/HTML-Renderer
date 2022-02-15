@@ -19,7 +19,7 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
     /// <summary>
     /// Adapter for WPF Font family object for core.
     /// </summary>
-    internal sealed class FontFamilyAdapter : RFontFamily
+    internal sealed class FontFamilyAdapter : IRFontFamily
     {
         /// <summary>
         /// Default language to get font family name by
@@ -47,7 +47,7 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
             get { return _fontFamily; }
         }
 
-        public override string Name
+        public  string FontName
         {
             get
             {

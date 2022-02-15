@@ -18,7 +18,7 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
     /// <summary>
     /// Adapter for WPF Image object for core.
     /// </summary>
-    internal sealed class ImageAdapter : RImage
+    internal sealed class ImageAdapter : IRImage
     {
         /// <summary>
         /// the underline WPF image.
@@ -40,21 +40,22 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
         {
             get { return _image; }
         }
-
-        public override double Width
+        #region interface
+        public double ImageWidth
         {
             get { return _image.PixelWidth; }
         }
 
-        public override double Height
+        public  double ImageHeight
         {
             get { return _image.PixelHeight; }
         }
 
-        public override void Dispose()
+        public  void Dispose()
         {
             if (_image.StreamSource != null)
                 _image.StreamSource.Dispose();
         }
+        #endregion
     }
 }

@@ -11,7 +11,10 @@
 // "The Art of War"
 
 //using PdfSharp.Drawing;
+using SkiaSharp;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 using TheArtOfDev.HtmlRenderer.Adapters.Entities;
 
 namespace TheArtOfDev.HtmlRenderer.PdfSharp.Utilities
@@ -24,7 +27,7 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Utilities
         /// <summary>
         /// Convert from WinForms point to core point.
         /// </summary>
-        public static RPoint Convert(XPoint p)
+        public static RPoint Convert(SKPoint p)
         {
             return new RPoint(p.X, p.Y);
         }
@@ -32,9 +35,9 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Utilities
         /// <summary>
         /// Convert from WinForms point to core point.
         /// </summary>
-        public static XPoint[] Convert(RPoint[] points)
+        public static SKPoint[] Convert(RPoint[] points)
         {
-            XPoint[] myPoints = new XPoint[points.Length];
+            SKPoint[] myPoints = new SKPoint[points.Length];
             for (int i = 0; i < points.Length; i++)
                 myPoints[i] = Convert(points[i]);
             return myPoints;
@@ -43,15 +46,15 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Utilities
         /// <summary>
         /// Convert from core point to WinForms point.
         /// </summary>
-        public static XPoint Convert(RPoint p)
+        public static SKPoint Convert(RPoint p)
         {
-            return new XPoint((float)p.X, (float)p.Y);
+            return new SKPoint((float)p.X, (float)p.Y);
         }
 
         /// <summary>
         /// Convert from WinForms size to core size.
         /// </summary>
-        public static RSize Convert(XSize s)
+        public static RSize Convert(SKSize s)
         {
             return new RSize(s.Width, s.Height);
         }
@@ -59,15 +62,15 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Utilities
         /// <summary>
         /// Convert from core size to WinForms size.
         /// </summary>
-        public static XSize Convert(RSize s)
+        public static SKSize Convert(RSize s)
         {
-            return new XSize((float)s.Width, (float)s.Height);
+            return new SKSize((float)s.Width, (float)s.Height);
         }
 
         /// <summary>
         /// Convert from WinForms rectangle to core rectangle.
         /// </summary>
-        public static RRect Convert(XRect r)
+        public static RRect Convert(SKRect r)
         {
             return new RRect(r.Left, r.Top, r.Width, r.Height);
         }
@@ -75,40 +78,45 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Utilities
         /// <summary>
         /// Convert from core rectangle to WinForms rectangle.
         /// </summary>
-        public static XRect Convert(RRect r)
+        public static SKRect Convert(RRect r)
         {
-            return XRect.Create((float)r.X, (float)r.Y, (float)r.Width, (float)r.Height);
+            return SKRect.Create((float)r.X, (float)r.Y, (float)r.Width, (float)r.Height);
         }
 
         /// <summary>
         /// Convert from core color to WinForms color.
         /// </summary>
-        public static XColor Convert(RColor c)
+        public static SKColor Convert(RColor c)
         {
-            return new XColor(c.R, c.G, c.B, c.A);
+            return new SKColor(c.R, c.G, c.B, c.A);
         }
 
         /// <summary>
         /// Convert from  color to WinForms color.
         /// </summary>
-        public static RColor Convert(Color c)
+        public static RColor Convert(SKColor c)
         {
             return RColor.FromArgb(c.Alpha, c.Red, c.Green, c.Blue);
         }
 
-        public static Color FromName(string colorName)
+        static Dictionary<string,SKColor> ValidColorNamesLc;
+        public static SKColor FromName(string colorName)
         {
-            switch (colorName)
+            if(ValidColorNamesLc == null)
             {
-                case nameof(SkiaSharp.SKColors.CadetBlue):
-                    return SkiaSharp.SKColors.CadetBlue;
-                case nameof(SkiaSharp.SKColors.Aqua):
-                    return SkiaSharp.SKColors.Aqua;
-                case nameof(SkiaSharp.SKColors.Blue):
-                    return SkiaSharp.SKColors.Blue;
-                default:
-                    return SkiaSharp.SKColors.Empty;
+                ValidColorNamesLc = new Dictionary<string, SKColor>();
+                var colorList = new List<FieldInfo>(typeof(SKColors).GetFields());
+                foreach (var colorProp in colorList)
+                {
+         
+                    ValidColorNamesLc.Add(colorProp.Name.ToLower(), (SKColor)colorProp.GetValue(SKColor.Empty));
+                }
             }
+
+            // check if color name is valid to avoid ColorConverter throwing an exception
+            if (!ValidColorNamesLc.ContainsKey(colorName.ToLower()))
+                return SKColor.Empty;
+            return ValidColorNamesLc[colorName];
         }
     }
 }

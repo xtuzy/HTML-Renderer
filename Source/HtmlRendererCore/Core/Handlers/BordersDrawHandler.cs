@@ -73,7 +73,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         /// <param name="brush">the brush to use</param>
         /// <param name="rectangle">the bounding rectangle to draw in</param>
         /// <returns>Beveled border path, null if there is no rounded corners</returns>
-        public static void DrawBorder(Border border, RGraphics g, CssBox box, RBrush brush, RRect rectangle)
+        public static void DrawBorder(Border border, RGraphics g, CssBox box, IRBrush brush, RRect rectangle)
         {
             SetInOutsetRectanglePoints(border, box, rectangle, true, true);
             g.DrawPolygon(brush, _borderPts);
@@ -200,39 +200,39 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         /// <param name="b">Box which the border corresponds</param>
         /// <param name="r">the rectangle the border is enclosing</param>
         /// <returns>Beveled border path, null if there is no rounded corners</returns>
-        private static RGraphicsPath GetRoundedBorderPath(RGraphics g, Border border, CssBox b, RRect r)
+        private static IRGraphicsPath GetRoundedBorderPath(RGraphics g, Border border, CssBox b, RRect r)
         {
-            RGraphicsPath path = null;
+            IRGraphicsPath path = null;
             switch (border)
             {
                 case Border.Top:
                     if (b.ActualCornerNw > 0 || b.ActualCornerNe > 0)
                     {
                         path = g.GetGraphicsPath();
-                        path.Start(r.Left + b.ActualBorderLeftWidth / 2, r.Top + b.ActualBorderTopWidth / 2 + b.ActualCornerNw);
+                        path.StartPath(r.Left + b.ActualBorderLeftWidth / 2, r.Top + b.ActualBorderTopWidth / 2 + b.ActualCornerNw);
 
                         if (b.ActualCornerNw > 0)
-                            path.ArcTo(r.Left + b.ActualBorderLeftWidth / 2 + b.ActualCornerNw, r.Top + b.ActualBorderTopWidth / 2, b.ActualCornerNw, RGraphicsPath.Corner.TopLeft);
+                            path.ArcTo(r.Left + b.ActualBorderLeftWidth / 2 + b.ActualCornerNw, r.Top + b.ActualBorderTopWidth / 2, b.ActualCornerNw, IRGraphicsPath.Corner.TopLeft);
 
                         path.LineTo(r.Right - b.ActualBorderRightWidth / 2 - b.ActualCornerNe, r.Top + b.ActualBorderTopWidth / 2);
 
                         if (b.ActualCornerNe > 0)
-                            path.ArcTo(r.Right - b.ActualBorderRightWidth / 2, r.Top + b.ActualBorderTopWidth / 2 + b.ActualCornerNe, b.ActualCornerNe, RGraphicsPath.Corner.TopRight);
+                            path.ArcTo(r.Right - b.ActualBorderRightWidth / 2, r.Top + b.ActualBorderTopWidth / 2 + b.ActualCornerNe, b.ActualCornerNe, IRGraphicsPath.Corner.TopRight);
                     }
                     break;
                 case Border.Bottom:
                     if (b.ActualCornerSw > 0 || b.ActualCornerSe > 0)
                     {
                         path = g.GetGraphicsPath();
-                        path.Start(r.Right - b.ActualBorderRightWidth / 2, r.Bottom - b.ActualBorderBottomWidth / 2 - b.ActualCornerSe);
+                        path.StartPath(r.Right - b.ActualBorderRightWidth / 2, r.Bottom - b.ActualBorderBottomWidth / 2 - b.ActualCornerSe);
 
                         if (b.ActualCornerSe > 0)
-                            path.ArcTo(r.Right - b.ActualBorderRightWidth / 2 - b.ActualCornerSe, r.Bottom - b.ActualBorderBottomWidth / 2, b.ActualCornerSe, RGraphicsPath.Corner.BottomRight);
+                            path.ArcTo(r.Right - b.ActualBorderRightWidth / 2 - b.ActualCornerSe, r.Bottom - b.ActualBorderBottomWidth / 2, b.ActualCornerSe, IRGraphicsPath.Corner.BottomRight);
 
                         path.LineTo(r.Left + b.ActualBorderLeftWidth / 2 + b.ActualCornerSw, r.Bottom - b.ActualBorderBottomWidth / 2);
 
                         if (b.ActualCornerSw > 0)
-                            path.ArcTo(r.Left + b.ActualBorderLeftWidth / 2, r.Bottom - b.ActualBorderBottomWidth / 2 - b.ActualCornerSw, b.ActualCornerSw, RGraphicsPath.Corner.BottomLeft);
+                            path.ArcTo(r.Left + b.ActualBorderLeftWidth / 2, r.Bottom - b.ActualBorderBottomWidth / 2 - b.ActualCornerSw, b.ActualCornerSw, IRGraphicsPath.Corner.BottomLeft);
                     }
                     break;
                 case Border.Right:
@@ -242,15 +242,15 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
 
                         bool noTop = b.BorderTopStyle == CssConstants.None || b.BorderTopStyle == CssConstants.Hidden;
                         bool noBottom = b.BorderBottomStyle == CssConstants.None || b.BorderBottomStyle == CssConstants.Hidden;
-                        path.Start(r.Right - b.ActualBorderRightWidth / 2 - (noTop ? b.ActualCornerNe : 0), r.Top + b.ActualBorderTopWidth / 2 + (noTop ? 0 : b.ActualCornerNe));
+                        path.StartPath(r.Right - b.ActualBorderRightWidth / 2 - (noTop ? b.ActualCornerNe : 0), r.Top + b.ActualBorderTopWidth / 2 + (noTop ? 0 : b.ActualCornerNe));
 
                         if (b.ActualCornerNe > 0 && noTop)
-                            path.ArcTo(r.Right - b.ActualBorderLeftWidth / 2, r.Top + b.ActualBorderTopWidth / 2 + b.ActualCornerNe, b.ActualCornerNe, RGraphicsPath.Corner.TopRight);
+                            path.ArcTo(r.Right - b.ActualBorderLeftWidth / 2, r.Top + b.ActualBorderTopWidth / 2 + b.ActualCornerNe, b.ActualCornerNe, IRGraphicsPath.Corner.TopRight);
 
                         path.LineTo(r.Right - b.ActualBorderRightWidth / 2, r.Bottom - b.ActualBorderBottomWidth / 2 - b.ActualCornerSe);
 
                         if (b.ActualCornerSe > 0 && noBottom)
-                            path.ArcTo(r.Right - b.ActualBorderRightWidth / 2 - b.ActualCornerSe, r.Bottom - b.ActualBorderBottomWidth / 2, b.ActualCornerSe, RGraphicsPath.Corner.BottomRight);
+                            path.ArcTo(r.Right - b.ActualBorderRightWidth / 2 - b.ActualCornerSe, r.Bottom - b.ActualBorderBottomWidth / 2, b.ActualCornerSe, IRGraphicsPath.Corner.BottomRight);
                     }
                     break;
                 case Border.Left:
@@ -260,15 +260,15 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
 
                         bool noTop = b.BorderTopStyle == CssConstants.None || b.BorderTopStyle == CssConstants.Hidden;
                         bool noBottom = b.BorderBottomStyle == CssConstants.None || b.BorderBottomStyle == CssConstants.Hidden;
-                        path.Start(r.Left + b.ActualBorderLeftWidth / 2 + (noBottom ? b.ActualCornerSw : 0), r.Bottom - b.ActualBorderBottomWidth / 2 - (noBottom ? 0 : b.ActualCornerSw));
+                        path.StartPath(r.Left + b.ActualBorderLeftWidth / 2 + (noBottom ? b.ActualCornerSw : 0), r.Bottom - b.ActualBorderBottomWidth / 2 - (noBottom ? 0 : b.ActualCornerSw));
 
                         if (b.ActualCornerSw > 0 && noBottom)
-                            path.ArcTo(r.Left + b.ActualBorderLeftWidth / 2, r.Bottom - b.ActualBorderBottomWidth / 2 - b.ActualCornerSw, b.ActualCornerSw, RGraphicsPath.Corner.BottomLeft);
+                            path.ArcTo(r.Left + b.ActualBorderLeftWidth / 2, r.Bottom - b.ActualBorderBottomWidth / 2 - b.ActualCornerSw, b.ActualCornerSw, IRGraphicsPath.Corner.BottomLeft);
 
                         path.LineTo(r.Left + b.ActualBorderLeftWidth / 2, r.Top + b.ActualBorderTopWidth / 2 + b.ActualCornerNw);
 
                         if (b.ActualCornerNw > 0 && noTop)
-                            path.ArcTo(r.Left + b.ActualBorderLeftWidth / 2 + b.ActualCornerNw, r.Top + b.ActualBorderTopWidth / 2, b.ActualCornerNw, RGraphicsPath.Corner.TopLeft);
+                            path.ArcTo(r.Left + b.ActualBorderLeftWidth / 2 + b.ActualCornerNw, r.Top + b.ActualBorderTopWidth / 2, b.ActualCornerNw, IRGraphicsPath.Corner.TopLeft);
                     }
                     break;
             }
@@ -279,10 +279,10 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         /// <summary>
         /// Get pen to be used for border draw respecting its style.
         /// </summary>
-        private static RPen GetPen(RGraphics g, string style, RColor color, double width)
+        private static IRPen GetPen(RGraphics g, string style, RColor color, double width)
         {
             var p = g.GetPen(color);
-            p.Width = width;
+            p.PenWidth = width;
             switch (style)
             {
                 case "solid":

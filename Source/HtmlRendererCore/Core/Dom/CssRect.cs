@@ -171,7 +171,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
         /// <summary>
         /// Gets the image this words represents (if one exists)
         /// </summary>
-        public virtual RImage Image
+        public virtual IRImage Image
         {
             get { return null; }
             // ReSharper disable ValueParameterNotUsed
@@ -257,7 +257,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
         /// </summary>
         internal double LeftGlyphPadding
         {
-            get { return OwnerBox != null ? OwnerBox.ActualFont.LeftPadding : 0; }
+            get { return OwnerBox != null ? OwnerBox.ActualFont.FontLeftPadding : 0; }
         }
 
         /// <summary>

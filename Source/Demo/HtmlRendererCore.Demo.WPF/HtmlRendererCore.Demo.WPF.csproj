@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="TestSamples\01.Header.htm" />
+    <None Remove="TestSamples\02.Line break.htm" />
+    <None Remove="TestSamples\03.Paragraphs.htm" />
+    <None Remove="TestSamples\04.Blockquotes.htm" />
+    <None Remove="TestSamples\05.Images.htm" />
+    <None Remove="TestSamples\06.External Image.htm" />
+    <None Remove="TestSamples\07.Background Image.htm" />
+    <None Remove="TestSamples\08.White-space.htm" />
+    <None Remove="TestSamples\09.Inline.htm" />
+    <None Remove="TestSamples\10.BlockInInline.htm" />
+    <None Remove="TestSamples\11.LineHeight.htm" />
+    <None Remove="TestSamples\12.Text.htm" />
+    <None Remove="TestSamples\13.Tables.htm" />
+    <None Remove="TestSamples\14.Iframes.htm" />
+    <None Remove="TestSamples\15.MaxWidth.htm" />
+    <None Remove="TestSamples\16.Borders.htm" />
+    <None Remove="TestSamples\17.Languages.htm" />
+    <None Remove="TestSamples\18.Anchors.htm" />
+    <None Remove="TestSamples\19.Many images.htm" />
+    <None Remove="TestSamples\20.Fonts decorations.htm" />
+    <None Remove="TestSamples\21.Bullets.htm" />
+    <None Remove="TestSamples\22.RTL.htm" />
+    <None Remove="TestSamples\30.Misc.htm" />
+    <None Remove="TestSamples\31.ACID 1.htm" />
+    <None Remove="TestSamples\32.Image in css content.htm" />
+    <None Remove="TestSamples\33.Fixed position.htm" />
+    <None Remove="TestSamples\34.Breaking pages 1 - Paragraphs.htm" />
+    <None Remove="TestSamples\35.Breaking pages 2 - Tables.htm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TestSamples\01.Header.htm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="TestSamples\02.Line break.htm" />
+    <EmbeddedResource Include="TestSamples\03.Paragraphs.htm" />
+    <EmbeddedResource Include="TestSamples\04.Blockquotes.htm" />
+    <EmbeddedResource Include="TestSamples\05.Images.htm" />
+    <EmbeddedResource Include="TestSamples\06.External Image.htm" />
+    <EmbeddedResource Include="TestSamples\07.Background Image.htm" />
+    <EmbeddedResource Include="TestSamples\08.White-space.htm" />
+    <EmbeddedResource Include="TestSamples\09.Inline.htm" />
+    <EmbeddedResource Include="TestSamples\10.BlockInInline.htm" />
+    <EmbeddedResource Include="TestSamples\11.LineHeight.htm" />
+    <EmbeddedResource Include="TestSamples\12.Text.htm" />
+    <EmbeddedResource Include="TestSamples\13.Tables.htm" />
+    <EmbeddedResource Include="TestSamples\14.Iframes.htm" />
+    <EmbeddedResource Include="TestSamples\15.MaxWidth.htm" />
+    <EmbeddedResource Include="TestSamples\16.Borders.htm" />
+    <EmbeddedResource Include="TestSamples\17.Languages.htm" />
+    <EmbeddedResource Include="TestSamples\18.Anchors.htm" />
+    <EmbeddedResource Include="TestSamples\19.Many images.htm" />
+    <EmbeddedResource Include="TestSamples\20.Fonts decorations.htm" />
+    <EmbeddedResource Include="TestSamples\21.Bullets.htm" />
+    <EmbeddedResource Include="TestSamples\22.RTL.htm" />
+    <EmbeddedResource Include="TestSamples\30.Misc.htm" />
+    <EmbeddedResource Include="TestSamples\31.ACID 1.htm" />
+    <EmbeddedResource Include="TestSamples\32.Image in css content.htm" />
+    <EmbeddedResource Include="TestSamples\33.Fixed position.htm" />
+    <EmbeddedResource Include="TestSamples\34.Breaking pages 1 - Paragraphs.htm" />
+    <EmbeddedResource Include="TestSamples\35.Breaking pages 2 - Tables.htm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\HTMLRendererCore.WPF\HTMLRendererCore.WPF.csproj" />
+  </ItemGroup>
+
+</Project>

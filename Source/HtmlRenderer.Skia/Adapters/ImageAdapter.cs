@@ -18,17 +18,17 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
     /// <summary>
     /// Adapter for WinForms Image object for core.
     /// </summary>
-    internal sealed class ImageAdapter : RImage
+    internal sealed class ImageAdapter : IRImage
     {
         /// <summary>
         /// the underline win-forms image.
         /// </summary>
-        private readonly XImage _image;
+        private readonly SKBitmap _image;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public ImageAdapter(XImage image)
+        public ImageAdapter(SKBitmap image)
         {
             _image = image;
         }
@@ -36,22 +36,22 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
         /// <summary>
         /// the underline win-forms image.
         /// </summary>
-        public XImage Image
+        public SKBitmap Image
         {
             get { return _image; }
         }
 
-        public override double Width
+        public  double ImageWidth
         {
             get { return _image.Width; }
         }
 
-        public override double Height
+        public  double ImageHeight
         {
             get { return _image.Height; }
         }
 
-        public override void Dispose()
+        public  void Dispose()
         {
             _image.Dispose();
         }

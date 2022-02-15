@@ -20,11 +20,11 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
     /// <summary>
     /// Adapter for WinForms brushes objects for core.
     /// </summary>
-    internal sealed class BrushAdapter : RBrush
+    internal sealed class BrushAdapter : IRBrush
     {
         /// <summary>
         /// The actual PdfSharp brush instance.<br/>
-        /// Should be <see cref="XBrush"/> but there is some fucking issue inheriting from it =/
+        /// Should be <see cref="SKShader"/> but there is some fucking issue inheriting from it =/
         /// </summary>
         private readonly object _brush;
 
@@ -44,7 +44,7 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
             get { return _brush; }
         }
 
-        public override void Dispose()
+        public  void Dispose()
         { }
     }
 }

@@ -13,6 +13,7 @@
 using System;
 using TheArtOfDev.HtmlRenderer.Adapters;
 using TheArtOfDev.HtmlRenderer.Adapters.Entities;
+using static TheArtOfDev.HtmlRenderer.Adapters.IRGraphicsPath;
 //using PdfSharp.Drawing;
 
 namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
@@ -20,12 +21,12 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
     /// <summary>
     /// Adapter for WinForms graphics path object for core.
     /// </summary>
-    internal sealed class GraphicsPathAdapter : RGraphicsPath
+    internal sealed class GraphicsPathAdapter : IRGraphicsPath
     {
         /// <summary>
         /// The actual PdfSharp graphics path instance.
         /// </summary>
-        private readonly XGraphicsPath _graphicsPath = new XGraphicsPath();
+        private readonly SKPath _graphicsPath = new SKPath();
 
         /// <summary>
         /// the last point added to the path to begin next segment from
@@ -35,32 +36,32 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
         /// <summary>
         /// The actual PdfSharp graphics path instance.
         /// </summary>
-        public XGraphicsPath GraphicsPath
+        public SKPath GraphicsPath
         {
             get { return _graphicsPath; }
         }
 
-        public override void Start(double x, double y)
+        public  void StartPath(double x, double y)
         {
             _lastPoint = new RPoint(x, y);
         }
 
-        public override void LineTo(double x, double y)
+        public  void LineTo(double x, double y)
         {
             //_graphicsPath.AddLine((float)_lastPoint.X, (float)_lastPoint.Y, (float)x, (float)y);
             _graphicsPath.LineTo((float)x, (float)y);
             _lastPoint = new RPoint(x, y);
         }
 
-        public override void ArcTo(double x, double y, double size, Corner corner)
+        public  void ArcTo(double x, double y, double size, Corner corner)
         {
             float left = (float)(Math.Min(x, _lastPoint.X) - (corner == Corner.TopRight || corner == Corner.BottomRight ? size : 0));
             float top = (float)(Math.Min(y, _lastPoint.Y) - (corner == Corner.BottomLeft || corner == Corner.BottomRight ? size : 0));
-            _graphicsPath.AddArc(XRect.Create(left, top, (float)size * 2, (float)size * 2), GetStartAngle(corner), 90);
+            _graphicsPath.AddArc(SKRect.Create(left, top, (float)size * 2, (float)size * 2), GetStartAngle(corner), 90);
             _lastPoint = new RPoint(x, y);
         }
 
-        public override void Dispose()
+        public  void Dispose()
         { }
 
         /// <summary>

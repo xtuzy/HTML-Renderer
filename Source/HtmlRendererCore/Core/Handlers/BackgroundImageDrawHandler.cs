@@ -33,8 +33,8 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         public static void DrawBackgroundImage(RGraphics g, CssBox box, ImageLoadHandler imageLoadHandler, RRect rectangle)
         {
             // image size depends if specific rectangle given in image loader
-            var imgSize = new RSize(imageLoadHandler.Rectangle == RRect.Empty ? imageLoadHandler.Image.Width : imageLoadHandler.Rectangle.Width,
-                imageLoadHandler.Rectangle == RRect.Empty ? imageLoadHandler.Image.Height : imageLoadHandler.Rectangle.Height);
+            var imgSize = new RSize(imageLoadHandler.Rectangle == RRect.Empty ? imageLoadHandler.Image.ImageWidth : imageLoadHandler.Rectangle.Width,
+                imageLoadHandler.Rectangle == RRect.Empty ? imageLoadHandler.Image.ImageHeight : imageLoadHandler.Rectangle.Height);
 
             // get the location by BackgroundPosition value
             var location = GetLocation(box.BackgroundPosition, rectangle, imgSize);

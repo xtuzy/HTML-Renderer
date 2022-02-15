@@ -18,7 +18,7 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
     /// <summary>
     /// Adapter for WPF brushes.
     /// </summary>
-    internal sealed class BrushAdapter : RBrush
+    internal sealed class BrushAdapter : IRBrush
     {
         /// <summary>
         /// The actual WPF brush instance.
@@ -41,7 +41,8 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
             get { return _brush; }
         }
 
-        public override void Dispose()
-        { }
+        public void Dispose()
+        {
+        }
     }
 }

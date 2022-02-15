@@ -52,7 +52,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         /// <summary>
         /// callback raised when image load process is complete with image or without
         /// </summary>
-        private readonly ActionInt<RImage, RRect, bool> _loadCompleteCallback;
+        private readonly ActionInt<IRImage, RRect, bool> _loadCompleteCallback;
 
         /// <summary>
         /// Must be open as long as the image is in use
@@ -62,7 +62,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         /// <summary>
         /// the image instance of the loaded image
         /// </summary>
-        private RImage _image;
+        private IRImage _image;
 
         /// <summary>
         /// the image rectangle restriction as returned from image load event
@@ -92,7 +92,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         /// </summary>
         /// <param name="htmlContainer">the container of the html to handle load image for</param>
         /// <param name="loadCompleteCallback">callback raised when image load process is complete with image or without</param>
-        public ImageLoadHandler(HtmlContainerInt htmlContainer, ActionInt<RImage, RRect, bool> loadCompleteCallback)
+        public ImageLoadHandler(HtmlContainerInt htmlContainer, ActionInt<IRImage, RRect, bool> loadCompleteCallback)
         {
             ArgChecker.AssertArgNotNull(htmlContainer, "htmlContainer");
             ArgChecker.AssertArgNotNull(loadCompleteCallback, "loadCompleteCallback");
@@ -104,7 +104,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         /// <summary>
         /// the image instance of the loaded image
         /// </summary>
-        public RImage Image
+        public IRImage Image
         {
             get { return _image; }
         }
@@ -223,7 +223,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         /// </summary>
         /// <param name="src">the source that has the base64 encoded image</param>
         /// <returns>image from base64 data string or null if failed</returns>
-        private RImage GetImageFromData(string src)
+        private IRImage GetImageFromData(string src)
         {
             var s = src.Substring(src.IndexOf(':') + 1).Split(new[] { ',' }, 2);
             if (s.Length == 2)

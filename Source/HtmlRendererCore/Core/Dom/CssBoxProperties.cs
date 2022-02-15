@@ -151,7 +151,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
         private RColor _actualBorderBottomColor = RColor.Empty;
         private RColor _actualBorderRightColor = RColor.Empty;
         private RColor _actualBackgroundColor = RColor.Empty;
-        private RFont _actualFont;
+        private IRFont _actualFont;
 
         #endregion
 
@@ -615,7 +615,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
                     }
                     else if (len.Unit == CssUnit.Ems && GetParent() != null)
                     {
-                        computedValue = len.ConvertEmToPoints(GetParent().ActualFont.Size).ToString();
+                        computedValue = len.ConvertEmToPoints(GetParent().ActualFont.FontSize).ToString();
                     }
                     else
                     {
@@ -1247,7 +1247,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
         /// <summary>
         /// Gets the actual font of the parent
         /// </summary>
-        public RFont ActualParentFont
+        public IRFont ActualParentFont
         {
             get { return GetParent() == null ? ActualFont : GetParent().ActualFont; }
         }
@@ -1255,7 +1255,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
         /// <summary>
         /// Gets the font that should be actually used to paint the text of the box
         /// </summary>
-        public RFont ActualFont
+        public IRFont ActualFont
         {
             get
             {
@@ -1286,7 +1286,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
                     double parentSize = CssConstants.FontSize;
 
                     if (GetParent() != null)
-                        parentSize = GetParent().ActualFont.Size;
+                        parentSize = GetParent().ActualFont.FontSize;
 
                     switch (FontSize)
                     {
@@ -1333,7 +1333,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
             }
         }
 
-        protected abstract RFont GetCachedFont(string fontFamily, double fsize, RFontStyle st);
+        protected abstract IRFont GetCachedFont(string fontFamily, double fsize, RFontStyle st);
 
         /// <summary>
         /// Gets the line height
@@ -1432,7 +1432,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
         /// <returns></returns>
         public double GetEmHeight()
         {
-            return ActualFont.Height;
+            return ActualFont.FontHeight;
         }
 
         /// <summary>

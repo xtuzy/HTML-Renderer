@@ -84,7 +84,7 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
             DragDrop.DoDragDrop(_control, dragDropData, DragDropEffects.Copy);
         }
 
-        public override void MeasureString(string str, RFont font, double maxWidth, out int charFit, out double charFitWidth)
+        public override void MeasureString(string str, IRFont font, double maxWidth, out int charFit, out double charFitWidth)
         {
             using (var g = new GraphicsAdapter())
             {

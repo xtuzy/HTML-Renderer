@@ -87,7 +87,7 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// <param name="maxWidth">the max width to calculate fit characters</param>
         /// <param name="charFit">the number of characters that will fit under <see cref="maxWidth"/> restriction</param>
         /// <param name="charFitWidth">the width that only the characters that fit into max width take</param>
-        public abstract void MeasureString(string str, RFont font, double maxWidth, out int charFit, out double charFitWidth);
+        public abstract void MeasureString(string str, IRFont font, double maxWidth, out int charFit, out double charFitWidth);
 
         /// <summary>
         /// Invalidates the entire surface of the control and causes the control to be redrawn.

@@ -85,7 +85,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         /// <summary>
         /// the last context menu shown
         /// </summary>
-        private RContextMenu _contextMenu;
+        private IRContextMenu _contextMenu;
 
         /// <summary>
         /// the control that the context menu was shown on

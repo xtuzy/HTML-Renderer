@@ -724,7 +724,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
                     foreach (var boxWord in Words)
                     {
                         boxWord.Width = boxWord.Text != "\n" ? g.MeasureString(boxWord.Text, ActualFont).Width : 0;
-                        boxWord.Height = ActualFont.Height;
+                        boxWord.Height = ActualFont.FontHeight;
                     }
                 }
 
@@ -1300,7 +1300,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
         {
             if (rect.Width > 0 && rect.Height > 0)
             {
-                RBrush brush = null;
+                IRBrush brush = null;
 
                 if (BackgroundGradient != CssConstants.None)
                 {
@@ -1317,7 +1317,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
                     // if (isLast)
                     //  rectangle.Width -= ActualWordSpacing + CssUtils.GetWordEndWhitespace(ActualFont);
 
-                    RGraphicsPath roundrect = null;
+                    IRGraphicsPath roundrect = null;
                     if (IsRounded)
                     {
                         roundrect = RenderUtils.GetRoundRect(g, rect, ActualCornerNw, ActualCornerNe, ActualCornerSe, ActualCornerSw);
@@ -1446,7 +1446,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
                 x2 -= ActualPaddingRight + ActualBorderRightWidth;
 
             var pen = g.GetPen(ActualColor);
-            pen.Width = 1;
+            pen.PenWidth = 1;
             pen.DashStyle = RDashStyle.Solid;
             g.DrawLine(pen, x1, y, x2, y);
         }
@@ -1480,7 +1480,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
         /// <param name="image">the image loaded or null if failed</param>
         /// <param name="rectangle">the source rectangle to draw in the image (empty - draw everything)</param>
         /// <param name="async">is the callback was called async to load image call</param>
-        private void OnImageLoadComplete(RImage image, RRect rectangle, bool async)
+        private void OnImageLoadComplete(IRImage image, RRect rectangle, bool async)
         {
             if (image != null && async)
                 HtmlContainer.RequestRefresh(false);
@@ -1499,7 +1499,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
         /// </summary>
         /// <param name="g"></param>
         /// <param name="forceAlpha">used for images so they will have alpha effect</param>
-        protected RBrush GetSelectionBackBrush(RGraphics g, bool forceAlpha)
+        protected IRBrush GetSelectionBackBrush(RGraphics g, bool forceAlpha)
         {
             var backColor = HtmlContainer.SelectionBackColor;
             if (backColor != RColor.Empty)
@@ -1515,7 +1515,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
             }
         }
 
-        protected override RFont GetCachedFont(string fontFamily, double fsize, RFontStyle st)
+        protected override IRFont GetCachedFont(string fontFamily, double fsize, RFontStyle st)
         {
             return HtmlContainer.Adapter.GetFont(fontFamily, fsize, st);
         }

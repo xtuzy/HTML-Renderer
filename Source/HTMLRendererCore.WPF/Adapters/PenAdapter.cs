@@ -19,7 +19,7 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
     /// <summary>
     /// Adapter for WPF pens objects for core.
     /// </summary>
-    internal sealed class PenAdapter : RPen
+    internal sealed class PenAdapter : IRPen
     {
         /// <summary>
         /// The actual WPF brush instance.
@@ -43,14 +43,14 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
         {
             _brush = brush;
         }
-
-        public override double Width
+        #region interface
+        public double PenWidth
         {
             get { return _width; }
             set { _width = value; }
         }
 
-        public override RDashStyle DashStyle
+        public  RDashStyle DashStyle
         {
             set
             {
@@ -87,5 +87,7 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
             pen.DashStyle = _dashStyle;
             return pen;
         }
+
+        #endregion
     }
 }

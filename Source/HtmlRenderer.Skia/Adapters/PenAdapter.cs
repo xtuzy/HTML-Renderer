@@ -20,17 +20,17 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
     /// <summary>
     /// Adapter for WinForms pens objects for core.
     /// </summary>
-    internal sealed class PenAdapter : RPen
+    internal sealed class PenAdapter : IRPen
     {
         /// <summary>
         /// The actual WinForms brush instance.
         /// </summary>
-        private readonly XPen _pen;
+        private readonly SKPaint _pen;
 
         /// <summary>
         /// Init.
         /// </summary>
-        public PenAdapter(XPen pen)
+        public PenAdapter(SKPaint pen)
         {
             _pen = pen;
         }
@@ -38,18 +38,18 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
         /// <summary>
         /// The actual WinForms brush instance.
         /// </summary>
-        public XPen Pen
+        public SKPaint Pen
         {
             get { return _pen; }
         }
 
-        public override double Width
+        public  double PenWidth
         {
             get { return _pen.StrokeWidth; }
             set { _pen.StrokeWidth = (float)value; }
         }
 
-        public override RDashStyle DashStyle
+        public  RDashStyle DashStyle
         {
             set
             {

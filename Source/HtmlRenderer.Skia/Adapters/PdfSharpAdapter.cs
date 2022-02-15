@@ -50,7 +50,7 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
 
             foreach (var family in families.Families)
             {
-                AddFontFamily(new FontFamilyAdapter(XFontFamily.FromFamilyName(family.Name)));
+                AddFontFamily(new FontFamilyAdapter(SKTypeface.FromFamilyName(family.Name)));
             }
         }
 
@@ -76,20 +76,20 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
             }
         }
 
-        protected override RPen CreatePen(RColor color)
+        protected override IRPen CreatePen(RColor color)
         {
-            return new PenAdapter(new XPen() { Color = Utils.Convert(color) });
+            return new PenAdapter(new SKPaint() { Color = Utils.Convert(color) });
         }
 
-        protected override RBrush CreateSolidBrush(RColor color)
+        protected override IRBrush CreateSolidBrush(RColor color)
         {
-            /*XBrush solidBrush;
+            /*SKShader solidBrush;
             if (color == RColor.White)
-                solidBrush = XBrushes.White;
+                solidBrush = SKShaderes.White;
             else if (color == RColor.Black)
-                solidBrush = XBrushes.Black;
+                solidBrush = SKShaderes.Black;
             else if (color.A < 1)
-                solidBrush = XBrushes.Transparent;
+                solidBrush = SKShaderes.Transparent;
             else
                 solidBrush = new XSolidBrush(Utils.Convert(color));
 
@@ -97,7 +97,7 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
             return new BrushAdapter(null);
         }
 
-        protected override RBrush CreateLinearGradientBrush(RRect rect, RColor color1, RColor color2, double angle)
+        protected override IRBrush CreateLinearGradientBrush(RRect rect, RColor color1, RColor color2, double angle)
         {
 
             //XLinearGradientMode mode;
@@ -113,17 +113,17 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
             return new BrushAdapter(null);
         }
 
-        protected override RImage ConvertImageInt(object image)
+        protected override IRImage ConvertImageInt(object image)
         {
-            return image != null ? new ImageAdapter((XImage)image) : null;
+            return image != null ? new ImageAdapter((SKBitmap)image) : null;
         }
 
-        protected override RImage ImageFromStreamInt(Stream memoryStream)
+        protected override IRImage ImageFromStreamInt(Stream memoryStream)
         {
             return new ImageAdapter(SKBitmap.Decode(memoryStream));
         }
 
-        protected override RFont CreateFontInt(string family, double size, RFontStyle style)
+        protected override IRFont CreateFontInt(string family, double size, RFontStyle style)
         {
             var fontStyle = SKTypefaceStyle.Normal;
             switch (style)
@@ -142,13 +142,13 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
                     break;
             }
            
-            var xFont = XFont.FromFamilyName(family, fontStyle);
-            return new FontAdapter(xFont, (int)size);
+            var typeface = SKTypeface.FromFamilyName(family, fontStyle);
+            return new FontAdapter(typeface, (int)size);
         }
 
-        protected override RFont CreateFontInt(RFontFamily family, double size, RFontStyle style)
+        protected override IRFont CreateFontInt(IRFontFamily family, double size, RFontStyle style)
         {
-            return CreateFontInt(family.Name, size, style);
+            return CreateFontInt(family.FontName, size, style);
         }
     }
 }

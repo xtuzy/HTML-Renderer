@@ -42,12 +42,12 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// <summary>
         /// cache of brush color to brush instance
         /// </summary>
-        private readonly Dictionary<RColor, RBrush> _brushesCache = new Dictionary<RColor, RBrush>();
+        private readonly Dictionary<RColor, IRBrush> _brushesCache = new Dictionary<RColor, IRBrush>();
 
         /// <summary>
         /// cache of pen color to pen instance
         /// </summary>
-        private readonly Dictionary<RColor, RPen> _penCache = new Dictionary<RColor, RPen>();
+        private readonly Dictionary<RColor, IRPen> _penCache = new Dictionary<RColor, IRPen>();
 
         /// <summary>
         /// cache of all the font used not to create same font again and again
@@ -62,12 +62,12 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// <summary>
         /// image used to draw loading image icon
         /// </summary>
-        private RImage _loadImage;
+        private IRImage _loadImage;
 
         /// <summary>
         /// image used to draw error image icon
         /// </summary>
-        private RImage _errorImage;
+        private IRImage _errorImage;
 
         #endregion
 
@@ -104,9 +104,9 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// </summary>
         /// <param name="color">the color to get pen for</param>
         /// <returns>pen instance</returns>
-        public RPen GetPen(RColor color)
+        public IRPen GetPen(RColor color)
         {
-            RPen pen;
+            IRPen pen;
             if (!_penCache.TryGetValue(color, out pen))
             {
                 _penCache[color] = pen = CreatePen(color);
@@ -119,9 +119,9 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// </summary>
         /// <param name="color">the color to get brush for</param>
         /// <returns>brush instance</returns>
-        public RBrush GetSolidBrush(RColor color)
+        public IRBrush GetSolidBrush(RColor color)
         {
-            RBrush brush;
+            IRBrush brush;
             if (!_brushesCache.TryGetValue(color, out brush))
             {
                 _brushesCache[color] = brush = CreateSolidBrush(color);
@@ -137,28 +137,28 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// <param name="color2">the end color of the gradient</param>
         /// <param name="angle">the angle to move the gradient from start color to end color in the rectangle</param>
         /// <returns>linear gradient color brush instance</returns>
-        public RBrush GetLinearGradientBrush(RRect rect, RColor color1, RColor color2, double angle)
+        public IRBrush GetLinearGradientBrush(RRect rect, RColor color1, RColor color2, double angle)
         {
             return CreateLinearGradientBrush(rect, color1, color2, angle);
         }
 
         /// <summary>
-        /// Convert image object returned from <see cref="HtmlImageLoadEventArgs"/> to <see cref="RImage"/>.
+        /// Convert image object returned from <see cref="HtmlImageLoadEventArgs"/> to <see cref="IRImage"/>.
         /// </summary>
         /// <param name="image">the image returned from load event</param>
         /// <returns>converted image or null</returns>
-        public RImage ConvertImage(object image)
+        public IRImage ConvertImage(object image)
         {
             // TODO:a remove this by creating better API.
             return ConvertImageInt(image);
         }
 
         /// <summary>
-        /// Create an <see cref="RImage"/> object from the given stream.
+        /// Create an <see cref="IRImage"/> object from the given stream.
         /// </summary>
         /// <param name="memoryStream">the stream to create image from</param>
         /// <returns>new image instance</returns>
-        public RImage ImageFromStream(Stream memoryStream)
+        public IRImage ImageFromStream(Stream memoryStream)
         {
             return ImageFromStreamInt(memoryStream);
         }
@@ -177,7 +177,7 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// Adds a font family to be used.
         /// </summary>
         /// <param name="fontFamily">The font family to add.</param>
-        public void AddFontFamily(RFontFamily fontFamily)
+        public void AddFontFamily(IRFontFamily fontFamily)
         {
             _fontsHandler.AddFontFamily(fontFamily);
         }
@@ -201,7 +201,7 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// <param name="size">font size</param>
         /// <param name="style">font style</param>
         /// <returns>font instance</returns>
-        public RFont GetFont(string family, double size, RFontStyle style)
+        public IRFont GetFont(string family, double size, RFontStyle style)
         {
             return _fontsHandler.GetCachedFont(family, size, style);
         }
@@ -209,7 +209,7 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// <summary>
         /// Get image to be used while HTML image is loading.
         /// </summary>
-        public RImage GetLoadingImage()
+        public IRImage GetLoadingImage()
         {
             if (_loadImage == null)
             {
@@ -223,7 +223,7 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// <summary>
         /// Get image to be used if HTML image load failed.
         /// </summary>
-        public RImage GetLoadingFailedImage()
+        public IRImage GetLoadingFailedImage()
         {
             if (_errorImage == null)
             {
@@ -273,7 +273,7 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// Not relevant for platforms that don't render HTML on UI element.
         /// </summary>
         /// <param name="image">the image object to set to clipboard</param>
-        public void SetToClipboard(RImage image)
+        public void SetToClipboard(IRImage image)
         {
             SetToClipboardInt(image);
         }
@@ -283,7 +283,7 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// Not relevant for platforms that don't render HTML on UI element.
         /// </summary>
         /// <returns>new context menu</returns>
-        public RContextMenu GetContextMenu()
+        public IRContextMenu GetContextMenu()
         {
             return CreateContextMenuInt();
         }
@@ -296,7 +296,7 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// <param name="name">the name of the image for save dialog</param>
         /// <param name="extension">the extension of the image for save dialog</param>
         /// <param name="control">optional: the control to show the dialog on</param>
-        public void SaveToFile(RImage image, string name, string extension, RControl control = null)
+        public void SaveToFile(IRImage image, string name, string extension, RControl control = null)
         {
             SaveToFileInt(image, name, extension, control);
         }
@@ -308,7 +308,7 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// <param name="size">font size</param>
         /// <param name="style">font style</param>
         /// <returns>font instance</returns>
-        internal RFont CreateFont(string family, double size, RFontStyle style)
+        internal IRFont CreateFont(string family, double size, RFontStyle style)
         {
             return CreateFontInt(family, size, style);
         }
@@ -321,7 +321,7 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// <param name="size">font size</param>
         /// <param name="style">font style</param>
         /// <returns>font instance</returns>
-        internal RFont CreateFont(RFontFamily family, double size, RFontStyle style)
+        internal IRFont CreateFont(IRFontFamily family, double size, RFontStyle style)
         {
             return CreateFontInt(family, size, style);
         }
@@ -341,14 +341,14 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// </summary>
         /// <param name="color">the color to get pen for</param>
         /// <returns>pen instance</returns>
-        protected abstract RPen CreatePen(RColor color);
+        protected abstract IRPen CreatePen(RColor color);
 
         /// <summary>
         /// Get cached solid brush instance for the given color.
         /// </summary>
         /// <param name="color">the color to get brush for</param>
         /// <returns>brush instance</returns>
-        protected abstract RBrush CreateSolidBrush(RColor color);
+        protected abstract IRBrush CreateSolidBrush(RColor color);
 
         /// <summary>
         /// Get linear gradient color brush from <paramref name="color1"/> to <paramref name="color2"/>.
@@ -358,21 +358,21 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// <param name="color2">the end color of the gradient</param>
         /// <param name="angle">the angle to move the gradient from start color to end color in the rectangle</param>
         /// <returns>linear gradient color brush instance</returns>
-        protected abstract RBrush CreateLinearGradientBrush(RRect rect, RColor color1, RColor color2, double angle);
+        protected abstract IRBrush CreateLinearGradientBrush(RRect rect, RColor color1, RColor color2, double angle);
 
         /// <summary>
-        /// Convert image object returned from <see cref="HtmlImageLoadEventArgs"/> to <see cref="RImage"/>.
+        /// Convert image object returned from <see cref="HtmlImageLoadEventArgs"/> to <see cref="IRImage"/>.
         /// </summary>
         /// <param name="image">the image returned from load event</param>
         /// <returns>converted image or null</returns>
-        protected abstract RImage ConvertImageInt(object image);
+        protected abstract IRImage ConvertImageInt(object image);
 
         /// <summary>
-        /// Create an <see cref="RImage"/> object from the given stream.
+        /// Create an <see cref="IRImage"/> object from the given stream.
         /// </summary>
         /// <param name="memoryStream">the stream to create image from</param>
         /// <returns>new image instance</returns>
-        protected abstract RImage ImageFromStreamInt(Stream memoryStream);
+        protected abstract IRImage ImageFromStreamInt(Stream memoryStream);
 
         /// <summary>
         /// Get font instance by given font family name, size and style.
@@ -381,7 +381,7 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// <param name="size">font size</param>
         /// <param name="style">font style</param>
         /// <returns>font instance</returns>
-        protected abstract RFont CreateFontInt(string family, double size, RFontStyle style);
+        protected abstract IRFont CreateFontInt(string family, double size, RFontStyle style);
 
         /// <summary>
         /// Get font instance by given font family instance, size and style.<br/>
@@ -391,7 +391,7 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// <param name="size">font size</param>
         /// <param name="style">font style</param>
         /// <returns>font instance</returns>
-        protected abstract RFont CreateFontInt(RFontFamily family, double size, RFontStyle style);
+        protected abstract IRFont CreateFontInt(IRFontFamily family, double size, RFontStyle style);
 
         /// <summary>
         /// Get data object for the given html and plain text data.<br />
@@ -428,7 +428,7 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// Set the given image to clipboard.
         /// </summary>
         /// <param name="image"></param>
-        protected virtual void SetToClipboardInt(RImage image)
+        protected virtual void SetToClipboardInt(IRImage image)
         {
             throw new NotImplementedException();
         }
@@ -437,7 +437,7 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// Create a context menu that can be used on the control
         /// </summary>
         /// <returns>new context menu</returns>
-        protected virtual RContextMenu CreateContextMenuInt()
+        protected virtual IRContextMenu CreateContextMenuInt()
         {
             throw new NotImplementedException();
         }
@@ -449,7 +449,7 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         /// <param name="name">the name of the image for save dialog</param>
         /// <param name="extension">the extension of the image for save dialog</param>
         /// <param name="control">optional: the control to show the dialog on</param>
-        protected virtual void SaveToFileInt(RImage image, string name, string extension, RControl control = null)
+        protected virtual void SaveToFileInt(IRImage image, string name, string extension, RControl control = null)
         {
             throw new NotImplementedException();
         }

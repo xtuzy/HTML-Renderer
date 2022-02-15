@@ -51,7 +51,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
             }
             else if (imageWord.Image != null)
             {
-                imageWord.Width = imageWord.ImageRectangle == RRect.Empty ? imageWord.Image.Width : imageWord.ImageRectangle.Width;
+                imageWord.Width = imageWord.ImageRectangle == RRect.Empty ? imageWord.Image.ImageWidth : imageWord.ImageRectangle.Width;
             }
             else
             {
@@ -84,7 +84,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
             }
             else if (imageWord.Image != null)
             {
-                imageWord.Height = imageWord.ImageRectangle == RRect.Empty ? imageWord.Image.Height : imageWord.ImageRectangle.Height;
+                imageWord.Height = imageWord.ImageRectangle == RRect.Empty ? imageWord.Image.ImageHeight : imageWord.ImageRectangle.Height;
             }
             else
             {
@@ -97,15 +97,15 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
                 if ((hasImageTagWidth && !hasImageTagHeight) || scaleImageHeight)
                 {
                     // Divide the given tag width with the actual image width, to get the ratio.
-                    double ratio = imageWord.Width / imageWord.Image.Width;
-                    imageWord.Height = imageWord.Image.Height * ratio;
+                    double ratio = imageWord.Width / imageWord.Image.ImageWidth;
+                    imageWord.Height = imageWord.Image.ImageHeight * ratio;
                 }
                 // If only the height was set in the html tag, ratio the width.
                 else if (hasImageTagHeight && !hasImageTagWidth)
                 {
                     // Divide the given tag height with the actual image height, to get the ratio.
-                    double ratio = imageWord.Height / imageWord.Image.Height;
-                    imageWord.Width = imageWord.Image.Width * ratio;
+                    double ratio = imageWord.Height / imageWord.Image.ImageHeight;
+                    imageWord.Width = imageWord.Image.ImageWidth * ratio;
                 }
             }
 

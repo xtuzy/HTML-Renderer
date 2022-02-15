@@ -13,7 +13,7 @@
 namespace TheArtOfDev.HtmlRenderer.Adapters.Entities
 {
     /// <summary>
-    /// Specifies the style of dashed lines drawn with a <see cref="RPen"/> object.
+    /// Specifies the style of dashed lines drawn with a <see cref="IRPen"/> object.
     /// </summary>
     public enum RDashStyle
     {

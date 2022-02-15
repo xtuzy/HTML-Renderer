@@ -24,17 +24,17 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
         /// <summary>
         /// The image to draw in the brush
         /// </summary>
-        private readonly XImage _image;
+        private readonly SKBitmap _image;
 
         /// <summary>
         /// the
         /// </summary>
-        private readonly XRect _dstRect;
+        private readonly SKRect _dstRect;
 
         /// <summary>
         /// the transform the location of the image to handle center alignment
         /// </summary>
-        private readonly XPoint _translateTransformLocation;
+        private readonly SKPoint _translateTransformLocation;
 
         #endregion
 
@@ -42,7 +42,7 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
         /// <summary>
         /// Init.
         /// </summary>
-        public XTextureBrush(XImage image, XRect dstRect, XPoint translateTransformLocation)
+        public XTextureBrush(SKBitmap image, SKRect dstRect, SKPoint translateTransformLocation)
         {
             _image = image;
             _dstRect = dstRect;
@@ -52,11 +52,11 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
         /// <summary>
         /// Draw the texture image in the given graphics at the given location.
         /// </summary>
-        public void DrawRectangle(XGraphics g, float x, float y, float width, float height)
+        public void DrawRectangle(SKCanvas g, float x, float y, float width, float height)
         {
             var prevState = g.Save();
-            //g.IntersectClip(new XRect(x, y, width, height));
-            g.ClipRect(XRect.Create(x, y, width, height));
+            //g.IntersectClip(new SKRect(x, y, width, height));
+            g.ClipRect(SKRect.Create(x, y, width, height));
 
             var rx = _translateTransformLocation.X;
             var w = _image.Width; var h = _image.Height;
@@ -65,7 +65,7 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
                 var ry = _translateTransformLocation.Y;
                 while (ry < y + height)
                 {
-                    g.DrawBitmap(_image, XRect.Create(rx, ry, w, h));
+                    g.DrawBitmap(_image, SKRect.Create(rx, ry, w, h));
                     ry += h;
                 }
                 rx += w;

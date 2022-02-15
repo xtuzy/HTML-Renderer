@@ -517,7 +517,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
             if (_videoTitle != null && _imageWord.Width > 40 && _imageWord.Height > 40)
             {
                 var font = HtmlContainer.Adapter.GetFont("Arial", 9f, RFontStyle.Regular);
-                g.DrawRectangle(g.GetSolidBrush(RColor.FromArgb(160, 0, 0, 0)), rect.Left, rect.Top, rect.Width, ActualFont.Height + 7);
+                g.DrawRectangle(g.GetSolidBrush(RColor.FromArgb(160, 0, 0, 0)), rect.Left, rect.Top, rect.Width, ActualFont.FontHeight + 7);
 
                 var titleRect = new RRect(rect.Left + 3, rect.Top + 3, rect.Width - 6, rect.Height - 6);
                 g.DrawString(_videoTitle, font, RColor.WhiteSmoke, titleRect.Location, RSize.Empty, false);
@@ -579,7 +579,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Dom
         /// <param name="image">the image loaded or null if failed</param>
         /// <param name="rectangle">the source rectangle to draw in the image (empty - draw everything)</param>
         /// <param name="async">is the callback was called async to load image call</param>
-        private void OnLoadImageComplete(RImage image, RRect rectangle, bool async)
+        private void OnLoadImageComplete(IRImage image, RRect rectangle, bool async)
         {
             _imageWord.Image = image;
             _imageWord.ImageRectangle = rectangle;

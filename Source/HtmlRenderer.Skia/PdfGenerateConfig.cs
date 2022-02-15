@@ -25,12 +25,12 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp
         /// <summary>
         /// the page size to use for each page in the generated pdf
         /// </summary>
-        private PageSize _pageSize;
+        private SKSize _SKSize;
 
         /// <summary>
         /// if the page size is undefined this allow you to set manually the page size
         /// </summary>
-        private XSize _xsize;
+        //private SKSize _SKSize;
 
         /// <summary>
         /// the orientation of each page of the generated pdf
@@ -63,18 +63,18 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp
         /// <summary>
         /// the page size to use for each page in the generated pdf
         /// </summary>
-        public PageSize PageSize
+        public SKSize SKSize
         {
-            get { return _pageSize; }
-            set { _pageSize = value; }
+            get { return _SKSize; }
+            set { _SKSize = value; }
         }
 
         /// <summary>
         /// if the page size is undefined this allow you to set manually the page size
         /// </summary>
-        public XSize ManualPageSize {
-            get { return _xsize; }
-            set { _xsize = value; }
+        public SKSize ManualSKSize {
+            get { return _SKSize; }
+            set { _SKSize = value; }
         }
 
         /// <summary>
@@ -158,8 +158,8 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static XSize MilimitersToUnits(double width, double height) {
-            return new XSize((float)(width / 25.4 * 72), (float)(height / 25.4 * 72));
+        public static SKSize MilimitersToUnits(double width, double height) {
+            return new SKSize((float)(width / 25.4 * 72), (float)(height / 25.4 * 72));
         }
 
         /// <summary>
@@ -168,8 +168,8 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static XSize InchesToUnits(double width, double height) {
-            return new XSize((float)(width * 72), (float)(height * 72));
+        public static SKSize InchesToUnits(double width, double height) {
+            return new SKSize((float)(width * 72), (float)(height * 72));
         }
     }
 }

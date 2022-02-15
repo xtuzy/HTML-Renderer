@@ -30,7 +30,7 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
         /// <summary>
         /// The wrapped WinForms graphics object
         /// </summary>
-        private readonly XGraphics _g;
+        private readonly SKCanvas _g;
 
         /// <summary>
         /// if to release the graphics object on dispose
@@ -59,7 +59,7 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
         /// </summary>
         /// <param name="g">the win forms graphics object to use</param>
         /// <param name="releaseGraphics">optional: if to release the graphics object on dispose (default - false)</param>
-        public GraphicsAdapter(XGraphics g, bool releaseGraphics = false)
+        public GraphicsAdapter(SKCanvas g, bool releaseGraphics = false)
             : base(PdfSharpAdapter.Instance, new RRect(0, 0, double.MaxValue, double.MaxValue))
         {
             ArgChecker.AssertArgNotNull(g, "g");
@@ -104,50 +104,50 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
         }
 
         static SKPaint textPaint = new SKPaint();
-        public override RSize MeasureString(string str, RFont font)
+        public override RSize MeasureString(string str, IRFont font)
         {
             var fontAdapter = (FontAdapter)font;
             var realFont = fontAdapter.Font;
             textPaint.Typeface = realFont;
-            textPaint.TextSize = (float)fontAdapter.Size;
+            textPaint.TextSize = (float)fontAdapter.FontSize;
             textPaint.TextAlign = _stringFormat;
             //var size = _g.MeasureString(str, realFont, _stringFormat);
             var size = textPaint.MeasureText(str);
 
-            if (font.Height < 0)
+            if (font.FontHeight < 0)
             {
                 //var height = realFont.Height;
-                var height = fontAdapter.Size;
+                var height = fontAdapter.FontSize;
                 //var descent = realFont.Size * realFont.FontFamily.GetCellDescent(realFont.Style) / realFont.FontFamily.GetEmHeight(realFont.Style);
                 var descent = textPaint.FontMetrics.Descent;
                 fontAdapter.SetMetrics((int)height, (int)Math.Round((height - descent + 1f)));
             }
 
             //return Utils.Convert(size);
-            return Utils.Convert(new SKSize(size, (float)fontAdapter.Size));
+            return Utils.Convert(new SKSize(size, (float)fontAdapter.FontSize));
         }
 
-        public override void MeasureString(string str, RFont font, double maxWidth, out int charFit, out double charFitWidth)
+        public override void MeasureString(string str, IRFont font, double maxWidth, out int charFit, out double charFitWidth)
         {
             // there is no need for it - used for text selection
             throw new NotSupportedException();
         }
 
-        public override void DrawString(string str, RFont font, RColor color, RPoint point, RSize size, bool rtl)
+        public override void DrawString(string str, IRFont font, RColor color, RPoint point, RSize size, bool rtl)
         {
-            //var xBrush = ((BrushAdapter)_adapter.GetSolidBrush(color)).Brush;
+            //var SKShader = ((BrushAdapter)_adapter.GetSolidBrush(color)).Brush;
             textPaint.Typeface = ((FontAdapter)font).Font;
             textPaint.Color = Utils.Convert(color);
             textPaint.TextAlign = _stringFormat;
             _g.DrawText(str, (float)point.X, (float)point.Y, textPaint);
         }
 
-        public override RBrush GetTextureBrush(RImage image, RRect dstRect, RPoint translateTransformLocation)
+        public override IRBrush GetTextureBrush(IRImage image, RRect dstRect, RPoint translateTransformLocation)
         {
             return new BrushAdapter(new XTextureBrush(((ImageAdapter)image).Image, Utils.Convert(dstRect), Utils.Convert(translateTransformLocation)));
         }
 
-        public override RGraphicsPath GetGraphicsPath()
+        public override IRGraphicsPath GetGraphicsPath()
         {
             return new GraphicsPathAdapter();
         }
@@ -161,71 +161,71 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
 
         #region Delegate graphics methods
 
-        public override void DrawLine(RPen pen, double x1, double y1, double x2, double y2)
+        public override void DrawLine(IRPen pen, double x1, double y1, double x2, double y2)
         {
             //_g.DrawLine(((PenAdapter)pen).Pen, x1, y1, x2, y2);
             _g.DrawLine((float)x1, (float)y1, (float)x2, (float)y2, ((PenAdapter)pen).Pen);
         }
 
-        public override void DrawRectangle(RPen pen, double x, double y, double width, double height)
+        public override void DrawRectangle(IRPen pen, double x, double y, double width, double height)
         {
             _g.DrawRect((float)x, (float)y, (float)width, (float)height, ((PenAdapter)pen).Pen);
         }
 
-        public override void DrawRectangle(RBrush brush, double x, double y, double width, double height)
+        public override void DrawRectangle(IRBrush brush, double x, double y, double width, double height)
         {
-            var xBrush = ((BrushAdapter)brush).Brush;
-            var xTextureBrush = xBrush as XTextureBrush;
+            var SKShader = ((BrushAdapter)brush).Brush;
+            var xTextureBrush = SKShader as XTextureBrush;
             if (xTextureBrush != null)
             {
                 xTextureBrush.DrawRectangle(_g, (float)x, (float)y, (float)width, (float)height);
             }
             else
             {
-                //_g.DrawRect((XBrush)xBrush, x, y, width, height);
-                textPaint.Shader = (XBrush)xBrush;
+                //_g.DrawRect((SKShader)SKShader, x, y, width, height);
+                textPaint.Shader = (SKShader)SKShader;
                 _g.DrawRect((float)x, (float)y, (float)width, (float)height, textPaint);
 
                 // handle bug in PdfSharp that keeps the brush color for next string draw
-                //if (xBrush is XLinearGradientBrush)
+                //if (SKShader is XLinearGradientBrush)
                 //    _g.DrawRect(0, 0, 0.1, 0.1,new SKPaint() { Color=SKColors.White});
             }
         }
 
-        public override void DrawImage(RImage image, RRect destRect, RRect srcRect)
+        public override void DrawImage(IRImage image, RRect destRect, RRect srcRect)
         {
-            //_g.DrawImage(((ImageAdapter)image).Image, Utils.Convert(destRect), Utils.Convert(srcRect), XGraphicsUnit.Point);
+            //_g.DrawImage(((ImageAdapter)image).Image, Utils.Convert(destRect), Utils.Convert(srcRect), SKCanvasUnit.Point);
             _g.DrawBitmap(((ImageAdapter)image).Image, Utils.Convert(destRect), Utils.Convert(srcRect), textPaint);
         }
 
-        public override void DrawImage(RImage image, RRect destRect)
+        public override void DrawImage(IRImage image, RRect destRect)
         {
             _g.DrawBitmap(((ImageAdapter)image).Image, Utils.Convert(destRect));
         }
 
-        public override void DrawPath(RPen pen, RGraphicsPath path)
+        public override void DrawPath(IRPen pen, IRGraphicsPath path)
         {
             _g.DrawPath(((GraphicsPathAdapter)path).GraphicsPath, ((PenAdapter)pen).Pen);
         }
 
-        public override void DrawPath(RBrush brush, RGraphicsPath path)
+        public override void DrawPath(IRBrush brush, IRGraphicsPath path)
         {
-            textPaint.Shader = (XBrush)((BrushAdapter)brush).Brush;
+            textPaint.Shader = (SKShader)((BrushAdapter)brush).Brush;
             _g.DrawPath(((GraphicsPathAdapter)path).GraphicsPath,textPaint);
         }
 
-        public override void DrawPolygon(RBrush brush, RPoint[] points)
+        public override void DrawPolygon(IRBrush brush, RPoint[] points)
         {
             SKPath path = new SKPath() { FillType=SKPathFillType.Winding};
             foreach(var point in points)
             {
                 path.LineTo((float)point.X, (float)point.Y);
             }
-            textPaint.Shader = (XBrush)((BrushAdapter)brush).Brush;
+            textPaint.Shader = (SKShader)((BrushAdapter)brush).Brush;
             _g.DrawPath(path, textPaint);
             //if (points != null && points.Length > 0)
             //{
-            //    _g.DrawPolygon((XBrush)((BrushAdapter)brush).Brush, Utils.Convert(points), XFillMode.Winding);
+            //    _g.DrawPolygon((SKShader)((BrushAdapter)brush).Brush, Utils.Convert(points), XFillMode.Winding);
             //}
         }
 

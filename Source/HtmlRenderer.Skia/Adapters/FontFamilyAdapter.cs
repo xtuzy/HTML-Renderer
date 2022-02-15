@@ -18,17 +18,17 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
     /// <summary>
     /// Adapter for WinForms Font object for core.
     /// </summary>
-    internal sealed class FontFamilyAdapter : RFontFamily
+    internal sealed class FontFamilyAdapter : IRFontFamily
     {
         /// <summary>
         /// the underline win-forms font.
         /// </summary>
-        private readonly XFontFamily _fontFamily;
+        private readonly SKTypeface _fontFamily;
 
         /// <summary>
         /// Init.
         /// </summary>
-        public FontFamilyAdapter(XFontFamily fontFamily)
+        public FontFamilyAdapter(SKTypeface fontFamily)
         {
             _fontFamily = fontFamily;
         }
@@ -36,12 +36,12 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
         /// <summary>
         /// the underline win-forms font family.
         /// </summary>
-        public XFontFamily FontFamily
+        public SKTypeface FontFamily
         {
             get { return _fontFamily; }
         }
 
-        public override string Name
+        public  string FontName
         {
             get { return _fontFamily.FamilyName; }
         }

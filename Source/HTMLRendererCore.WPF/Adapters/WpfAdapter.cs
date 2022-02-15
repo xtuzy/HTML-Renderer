@@ -91,18 +91,18 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
             return Utils.Convert((Color)convertFromString);
         }
 
-        protected override RPen CreatePen(RColor color)
+        protected override IRPen CreatePen(RColor color)
         {
             return new PenAdapter(GetSolidColorBrush(color));
         }
 
-        protected override RBrush CreateSolidBrush(RColor color)
+        protected override IRBrush CreateSolidBrush(RColor color)
         {
             var solidBrush = GetSolidColorBrush(color);
             return new BrushAdapter(solidBrush);
         }
 
-        protected override RBrush CreateLinearGradientBrush(RRect rect, RColor color1, RColor color2, double angle)
+        protected override IRBrush CreateLinearGradientBrush(RRect rect, RColor color1, RColor color2, double angle)
         {
             var startColor = angle <= 180 ? Utils.Convert(color1) : Utils.Convert(color2);
             var endColor = angle <= 180 ? Utils.Convert(color2) : Utils.Convert(color1);
@@ -112,12 +112,12 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
             return new BrushAdapter(new LinearGradientBrush(startColor, endColor, new Point(x, y), new Point(1 - x, 1 - y)));
         }
 
-        protected override RImage ConvertImageInt(object image)
+        protected override IRImage ConvertImageInt(object image)
         {
             return image != null ? new ImageAdapter((BitmapImage)image) : null;
         }
 
-        protected override RImage ImageFromStreamInt(Stream memoryStream)
+        protected override IRImage ImageFromStreamInt(Stream memoryStream)
         {
             var bitmap = new BitmapImage();
             bitmap.BeginInit();
@@ -129,13 +129,13 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
             return new ImageAdapter(bitmap);
         }
 
-        protected override RFont CreateFontInt(string family, double size, RFontStyle style)
+        protected override IRFont CreateFontInt(string family, double size, RFontStyle style)
         {
             var fontFamily = (FontFamily)new FontFamilyConverter().ConvertFromString(family) ?? new FontFamily();
             return new FontAdapter(new Typeface(fontFamily, GetFontStyle(style), GetFontWidth(style), FontStretches.Normal), size);
         }
 
-        protected override RFont CreateFontInt(RFontFamily family, double size, RFontStyle style)
+        protected override IRFont CreateFontInt(IRFontFamily family, double size, RFontStyle style)
         {
             return new FontAdapter(new Typeface(((FontFamilyAdapter)family).FontFamily, GetFontStyle(style), GetFontWidth(style), FontStretches.Normal), size);
         }
@@ -155,17 +155,17 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
             ClipboardHelper.CopyToClipboard(html, plainText);
         }
 
-        protected override void SetToClipboardInt(RImage image)
+        protected override void SetToClipboardInt(IRImage image)
         {
             Clipboard.SetImage(((ImageAdapter)image).Image);
         }
 
-        protected override RContextMenu CreateContextMenuInt()
+        protected override IRContextMenu CreateContextMenuInt()
         {
             return new ContextMenuAdapter();
         }
 
-        protected override void SaveToFileInt(RImage image, string name, string extension, RControl control = null)
+        protected override void SaveToFileInt(IRImage image, string name, string extension, RControl control = null)
         {
             var saveDialog = new SaveFileDialog();
             saveDialog.Filter = "Images|*.png;*.bmp;*.jpg;*.tif;*.gif;*.wmp;";

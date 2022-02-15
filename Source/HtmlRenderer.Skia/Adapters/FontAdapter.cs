@@ -18,14 +18,14 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
     /// <summary>
     /// Adapter for WinForms Font object for core.
     /// </summary>
-    internal sealed class FontAdapter : RFont
+    internal sealed class FontAdapter : IRFont
     {
         #region Fields and Consts
 
         /// <summary>
         /// the underline win-forms font.
         /// </summary>
-        private readonly XFont _font;
+        private readonly SKTypeface _font;
 
         /// <summary>
         /// the vertical offset of the font underline location from the top of the font.
@@ -49,7 +49,7 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
         /// <summary>
         /// Init.
         /// </summary>
-        public FontAdapter(XFont font,int fontSize)
+        public FontAdapter(SKTypeface font,int fontSize)
         {
             _font = font;
             _fontSize = fontSize;
@@ -58,33 +58,33 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
         /// <summary>
         /// the underline win-forms font.
         /// </summary>
-        public XFont Font
+        public SKTypeface Font
         {
             get { return _font; }
         }
 
-        public override double Size
+        public  double FontSize
         {
             get { return _fontSize; }
         }
 
-        public override double UnderlineOffset
+        public  double UnderlineOffset
         {
             get { return _underlineOffset; }
         }
 
-        public override double Height
+        public  double FontHeight
         {
             get { return _height; }
         }
 
-        public override double LeftPadding
+        public  double FontLeftPadding
         {
             get { return _height / 6f; }
         }
 
 
-        public override double GetWhitespaceWidth(RGraphics graphics)
+        public  double GetWhitespaceWidth(RGraphics graphics)
         {
             if (_whitespaceWidth < 0)
             {
