@@ -13,7 +13,7 @@ namespace HtmlRendererCore.Skia.Adapters
 
         public SKBitmap Image;
         /// <summary>
-        /// for image
+        /// for image,don't create paint
         /// </summary>
         /// <param name="canvas"></param>
         /// <param name="image"></param>
@@ -45,7 +45,7 @@ namespace HtmlRendererCore.Skia.Adapters
 
         public SKPath Path;
         /// <summary>
-        /// for path
+        /// for path,don't create paint
         /// </summary>
         public SKPaintAdapter() 
         {
@@ -55,7 +55,7 @@ namespace HtmlRendererCore.Skia.Adapters
         public object Brush { get; private set; }
         public BrushType GetBrushType { get; private set; }
         /// <summary>
-        /// for color
+        /// for color,don't create paint
         /// </summary>
         public SKPaintAdapter(object brush,BrushType brushType = BrushType.SolidColor) 
         {
