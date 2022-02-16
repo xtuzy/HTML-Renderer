@@ -72,7 +72,8 @@ namespace HtmlRendererCore.Skia
         /// <returns>the generated image of the html</returns>
         public static void GeneratePdf(string filePath,string html, SKPdfGenerateConfig config, CssData cssData = null, EventHandler<HtmlStylesheetLoadEventArgs> stylesheetLoad = null, EventHandler<HtmlImageLoadEventArgs> imageLoad = null)
         {
-            var stream = SKFileWStream.OpenStream(filePath);
+            //var stream = SKFileWStream.OpenStream(filePath);
+            var stream = File.OpenWrite(filePath);
             // create PDF document to render the HTML into
             var document = SKDocument.CreatePdf(stream);
 

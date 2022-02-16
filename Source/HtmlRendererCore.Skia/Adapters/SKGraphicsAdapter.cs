@@ -37,69 +37,100 @@ namespace HtmlRendererCore.Skia.Adapters
 
         public override void DrawLine(IRPen pen, double x1, double y1, double x2, double y2)
         {
-            x1 = (int)x1;
-            x2 = (int)x2;
-            y1 = (int)y1;
-            y2 = (int)y2;
-
-            var adj = pen.PenWidth;
-            if (Math.Abs(x1 - x2) < .1 && Math.Abs(adj % 2 - 1) < .1)
+            using (var paint = GetPaintFromPen(pen))
             {
-                x1 += .5;
-                x2 += .5;
-            }
-            if (Math.Abs(y1 - y2) < .1 && Math.Abs(adj % 2 - 1) < .1)
-            {
-                y1 += .5;
-                y2 += .5;
-            }
+                x1 = (int)x1;
+                x2 = (int)x2;
+                y1 = (int)y1;
+                y2 = (int)y2;
 
-            canvas.DrawLine(new SKPoint((float)x1, (float)y1), new SKPoint((float)x2, (float)y2), ((SKPaintAdapter)pen).Paint);
+                var adj = pen.PenWidth;
+                if (Math.Abs(x1 - x2) < .1 && Math.Abs(adj % 2 - 1) < .1)
+                {
+                    x1 += .5;
+                    x2 += .5;
+                }
+                if (Math.Abs(y1 - y2) < .1 && Math.Abs(adj % 2 - 1) < .1)
+                {
+                    y1 += .5;
+                    y2 += .5;
+                }
+
+                canvas.DrawLine(new SKPoint((float)x1, (float)y1), new SKPoint((float)x2, (float)y2), paint);
+            }
         }
+        SKPaint GetPaintFromPen(IRPen pen)
+        {
+            var paint = new SKPaint() { IsAntialias = true };
 
+            var penPaintAdapter = (SKPaintAdapter)pen;
+            paint.StrokeWidth = (float)penPaintAdapter.PenWidth;
+            paint.PathEffect = penPaintAdapter.PathEffect;
+            paint.Color = (SKColor)penPaintAdapter.Brush;
+            return paint;
+        }
         public override void DrawPath(IRPen pen, IRGraphicsPath path)
         {
-            canvas.DrawPath(((SKPaintAdapter)path).ClosePath(), ((SKPaintAdapter)pen).Paint);
+            using (var paint = GetPaintFromPen(pen))
+            {
+                canvas.DrawPath(((SKPaintAdapter)path).ClosePath(), paint);
+            }
         }
 
         public override void DrawPath(IRBrush brush, IRGraphicsPath path)
         {
-            canvas.DrawPath(((SKPaintAdapter)path).ClosePath(), ((SKPaintAdapter)brush).Paint);
+            using (var paint = GetPanitFromBrush(brush))
+            {
+                canvas.DrawPath(((SKPaintAdapter)path).ClosePath(), paint);
+            }
         }
 
         public override void DrawPolygon(IRBrush brush, RPoint[] points)
         {
-            SKPath path = new SKPath() { FillType = SKPathFillType.Winding };
-            path.MoveTo((float)(points[0].X), (float)(points[0].Y));
-            for (var index = 1; index < points.Length; index++)
+            using (SKPath path = new SKPath() { FillType = SKPathFillType.Winding })
             {
-                var point = points[index];
-                path.LineTo((float)point.X, (float)point.Y);
+                using (var paint = GetPanitFromBrush(brush))
+                {
+                    path.MoveTo((float)(points[0].X), (float)(points[0].Y));
+                    for (var index = 1; index < points.Length; index++)
+                    {
+                        var point = points[index];
+                        path.LineTo((float)point.X, (float)point.Y);
+                    }
+                    path.Close();
+                    canvas.DrawPath(path, paint);
+                }
             }
-            path.Close();
-            canvas.DrawPath(path, ((SKPaintAdapter)brush).Paint);
         }
+        SKPaint GetPanitFromBrush(IRBrush brush)
+        {
+            var paint = new SKPaint() { IsAntialias = true };
 
+            var brushPaintAdapter = (SKPaintAdapter)brush;
+            switch (brushPaintAdapter.GetBrushType)
+            {
+                case SKPaintAdapter.BrushType.SolidColor:
+                    paint.Color = (SKColor)brushPaintAdapter.Brush;
+                    break;
+                case SKPaintAdapter.BrushType.LinerGradien:
+                case SKPaintAdapter.BrushType.ImageBrush:
+                    paint.Shader = (SKShader)brushPaintAdapter.Brush;
+                    break;
+            }
+            return paint;
+        }
         public override void DrawRectangle(IRPen pen, double x, double y, double width, double height)
         {
-            canvas.DrawRect((float)x, (float)y, (float)width, (float)height, ((SKPaintAdapter)pen).Paint);
+            using (var paint = GetPaintFromPen(pen))
+            {
+                canvas.DrawRect((float)x, (float)y, (float)width, (float)height, paint);
+            }
         }
 
         public override void DrawRectangle(IRBrush brush, double x, double y, double width, double height)
         {
-            using (var paint = new SKPaint() { IsAntialias = true })
+            using (var paint = GetPanitFromBrush(brush))
             {
-                var brushPaintAdapter = (SKPaintAdapter)brush;
-                switch (brushPaintAdapter.GetBrushType)
-                {
-                    case SKPaintAdapter.BrushType.SolidColor:
-                        paint.Color = (SKColor)brushPaintAdapter.Brush;
-                        break;
-                    case SKPaintAdapter.BrushType.LinerGradien:
-                    case SKPaintAdapter.BrushType.ImageBrush:
-                        paint.Shader = (SKShader)brushPaintAdapter.Brush;
-                        break;
-                }
                 canvas.DrawRect((float)x, (float)y, (float)width, (float)height, paint);
             }
         }

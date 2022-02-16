@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,40 +8,44 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="TestSamples\01.Header.htm" />
-    <None Remove="TestSamples\02.Line break.htm" />
-    <None Remove="TestSamples\03.Paragraphs.htm" />
-    <None Remove="TestSamples\04.Blockquotes.htm" />
-    <None Remove="TestSamples\05.Images.htm" />
-    <None Remove="TestSamples\06.External Image.htm" />
-    <None Remove="TestSamples\07.Background Image.htm" />
-    <None Remove="TestSamples\08.White-space.htm" />
-    <None Remove="TestSamples\09.Inline.htm" />
-    <None Remove="TestSamples\10.BlockInInline.htm" />
-    <None Remove="TestSamples\11.LineHeight.htm" />
-    <None Remove="TestSamples\12.Text.htm" />
-    <None Remove="TestSamples\13.Tables.htm" />
-    <None Remove="TestSamples\14.Iframes.htm" />
-    <None Remove="TestSamples\15.MaxWidth.htm" />
-    <None Remove="TestSamples\16.Borders.htm" />
-    <None Remove="TestSamples\17.Languages.htm" />
-    <None Remove="TestSamples\18.Anchors.htm" />
-    <None Remove="TestSamples\19.Many images.htm" />
-    <None Remove="TestSamples\20.Fonts decorations.htm" />
-    <None Remove="TestSamples\21.Bullets.htm" />
-    <None Remove="TestSamples\22.RTL.htm" />
-    <None Remove="TestSamples\30.Misc.htm" />
-    <None Remove="TestSamples\31.ACID 1.htm" />
-    <None Remove="TestSamples\32.Image in css content.htm" />
-    <None Remove="TestSamples\33.Fixed position.htm" />
-    <None Remove="TestSamples\34.Breaking pages 1 - Paragraphs.htm" />
-    <None Remove="TestSamples\35.Breaking pages 2 - Tables.htm" />
+    <None Remove="Samples\00.Intro.htm" />
+    <None Remove="Samples\01.History.htm" />
+    <None Remove="Samples\02.Text.htm" />
+    <None Remove="Samples\03.Tables.htm" />
+    <None Remove="Samples\04.Links.htm" />
+    <None Remove="Samples\05.Images.htm" />
+    <None Remove="Samples\06.Embeded video.htm" />
+    <None Remove="Samples\07.Additional features.htm" />
+    <None Remove="Samples\08.Tooltip.htm" />
+    <None Remove="Samples\09.Using the library.htm" />
+    <None Remove="Samples\10.HtmlPanel.htm" />
+    <None Remove="Samples\11.HtmlLabel.htm" />
+    <None Remove="Samples\12.HtmlToolTip.htm" />
+    <None Remove="Samples\13.HtmlRender.htm" />
+    <None Remove="Samples\14.HtmlContainer.htm" />
+    <None Remove="Samples\20.About.htm" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="TestSamples\01.Header.htm">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="Samples\00.Intro.htm" />
+    <EmbeddedResource Include="Samples\01.History.htm" />
+    <EmbeddedResource Include="Samples\02.Text.htm" />
+    <EmbeddedResource Include="Samples\03.Tables.htm" />
+    <EmbeddedResource Include="Samples\04.Links.htm" />
+    <EmbeddedResource Include="Samples\05.Images.htm" />
+    <EmbeddedResource Include="Samples\06.Embeded video.htm" />
+    <EmbeddedResource Include="Samples\07.Additional features.htm" />
+    <EmbeddedResource Include="Samples\08.Tooltip.htm" />
+    <EmbeddedResource Include="Samples\09.Using the library.htm" />
+    <EmbeddedResource Include="Samples\10.HtmlPanel.htm" />
+    <EmbeddedResource Include="Samples\11.HtmlLabel.htm" />
+    <EmbeddedResource Include="Samples\12.HtmlToolTip.htm" />
+    <EmbeddedResource Include="Samples\13.HtmlRender.htm" />
+    <EmbeddedResource Include="Samples\14.HtmlContainer.htm" />
+    <EmbeddedResource Include="Samples\20.About.htm" />
+    <EmbeddedResource Include="TestSamples\01.Header.htm">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

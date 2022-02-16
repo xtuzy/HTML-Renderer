@@ -9,7 +9,7 @@ namespace HtmlRendererCore.Skia.Adapters
 {
     internal class SKPaintAdapter : IRBrush, IRPen, IRGraphicsPath, IRImage, IRFontFamily, IRFont
     {
-        public SKPaint Paint { get; private set;}
+        public SKPaint Paint { get; private set; }
 
         public SKBitmap Image;
         /// <summary>
@@ -17,7 +17,7 @@ namespace HtmlRendererCore.Skia.Adapters
         /// </summary>
         /// <param name="canvas"></param>
         /// <param name="image"></param>
-        public SKPaintAdapter(SKBitmap image) 
+        public SKPaintAdapter(SKBitmap image)
         {
             this.Image = image;
         }
@@ -29,7 +29,7 @@ namespace HtmlRendererCore.Skia.Adapters
         /// <param name="font"></param>
         /// <param name="fontSize"></param>
         public SKPaintAdapter(SKTypeface font, int fontSize)
-        { 
+        {
             Paint = new SKPaint()
             {
                 IsAntialias = true,
@@ -39,15 +39,15 @@ namespace HtmlRendererCore.Skia.Adapters
             this.Font = font;
             FontName = Font.FamilyName;
             FontSize = fontSize;
-            
-            UnderlineOffset = Paint.FontMetrics.UnderlinePosition==null? -Paint.FontMetrics.Ascent: -Paint.FontMetrics.Ascent+ Paint.FontMetrics.UnderlinePosition.Value;
+
+            UnderlineOffset = Paint.FontMetrics.UnderlinePosition == null ? -Paint.FontMetrics.Ascent : -Paint.FontMetrics.Ascent + Paint.FontMetrics.UnderlinePosition.Value;
         }
 
         public SKPath Path;
         /// <summary>
         /// for path,don't create paint
         /// </summary>
-        public SKPaintAdapter() 
+        public SKPaintAdapter()
         {
             Path = new SKPath();
         }
@@ -55,9 +55,9 @@ namespace HtmlRendererCore.Skia.Adapters
         public object Brush { get; private set; }
         public BrushType GetBrushType { get; private set; }
         /// <summary>
-        /// for color,don't create paint
+        /// for brush and pen,don't create paint
         /// </summary>
-        public SKPaintAdapter(object brush,BrushType brushType = BrushType.SolidColor) 
+        public SKPaintAdapter(object brush, BrushType brushType = BrushType.SolidColor)
         {
             Brush = brush;
             GetBrushType = brushType;
@@ -71,14 +71,15 @@ namespace HtmlRendererCore.Skia.Adapters
         }
 
         #region IRPen
-        double penWidth;
+        double penWidth = -1;
         public double PenWidth
         {
             get => penWidth;
             set => penWidth = value;
         }
 
-        SKPathEffect pathEffect;
+
+        public SKPathEffect PathEffect {get;private set;}
         public RDashStyle DashStyle
         {
             set
@@ -90,21 +91,21 @@ namespace HtmlRendererCore.Skia.Adapters
                         break;
                     case RDashStyle.Dash:
                         //_pen.DashStyle = XDashStyle.Dash;
-                        pathEffect = SKPathEffect.CreateDash(new float[] { (float)(PenWidth * 3), (float)PenWidth }, (float)(PenWidth * 2));
+                        PathEffect = SKPathEffect.CreateDash(new float[] { (float)(PenWidth * 3), (float)PenWidth }, (float)(PenWidth * 2));
                         //if (Width < 2)
                         //    _pen.DashPattern = new[] { 4, 4d }; // better looking
                         break;
                     case RDashStyle.Dot:
                         //_pen.DashStyle = XDashStyle.Dot;
-                        pathEffect = SKPathEffect.CreateDash(new float[] { (float)PenWidth, (float)PenWidth }, (float)(PenWidth * 2));
+                        PathEffect = SKPathEffect.CreateDash(new float[] { (float)PenWidth, (float)PenWidth }, (float)(PenWidth * 2));
                         break;
                     case RDashStyle.DashDot:
                         //_pen.DashStyle = XDashStyle.DashDot;
-                        pathEffect = SKPathEffect.CreateDash(new float[] { (float)(PenWidth * 3), (float)PenWidth, (float)PenWidth, (float)PenWidth }, (float)(PenWidth * 2));
+                        PathEffect = SKPathEffect.CreateDash(new float[] { (float)(PenWidth * 3), (float)PenWidth, (float)PenWidth, (float)PenWidth }, (float)(PenWidth * 2));
                         break;
                     case RDashStyle.DashDotDot:
                         //_pen.DashStyle = XDashStyle.DashDotDot;
-                        pathEffect = SKPathEffect.CreateDash(new float[] { (float)(PenWidth * 3), (float)PenWidth, (float)PenWidth, (float)PenWidth, (float)PenWidth, (float)PenWidth }, (float)(PenWidth * 2));
+                        PathEffect = SKPathEffect.CreateDash(new float[] { (float)(PenWidth * 3), (float)PenWidth, (float)PenWidth, (float)PenWidth, (float)PenWidth, (float)PenWidth }, (float)(PenWidth * 2));
                         break;
                     case RDashStyle.Custom:
                         //_pen.DashStyle = XDashStyle.Custom;
@@ -194,7 +195,7 @@ namespace HtmlRendererCore.Skia.Adapters
         #endregion
         public void Dispose()
         {
-            pathEffect?.Dispose();
+            PathEffect?.Dispose();
             Paint?.Dispose();
             Image?.Dispose();
         }
