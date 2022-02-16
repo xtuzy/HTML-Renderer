@@ -11,6 +11,12 @@ namespace HtmlRendererCore.Skia.Adapters
     internal class SKGraphicsAdapter : RGraphics
     {
         SKCanvas canvas;
+        /// <summary>
+        /// for measure
+        /// </summary>
+        public SKGraphicsAdapter() : base(SKCanvasAdapter.Instance, new RRect(0, 0, double.MaxValue, double.MaxValue))
+        {
+        }
         public SKGraphicsAdapter(SKCanvas canvas) : base(SKCanvasAdapter.Instance, new RRect(0, 0, double.MaxValue, double.MaxValue))
         {
             this.canvas = canvas;
@@ -95,7 +101,7 @@ namespace HtmlRendererCore.Skia.Adapters
                         break;
                 }
                 canvas.DrawRect((float)x, (float)y, (float)width, (float)height, paint);
-            } 
+            }
         }
 
         public override void DrawString(string str, IRFont font, RColor color, RPoint point, RSize size, bool rtl)

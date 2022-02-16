@@ -24,7 +24,7 @@ using TheArtOfDev.HtmlRenderer.Core.Utils;
 namespace HtmlRendererCore.Skia
 {
     /// <summary>
-    /// Low level handling of Html Renderer logic, this class is used by <see cref="SKCanvasGenerator"/>.
+    /// Low level handling of Html Renderer logic, this class is used by <see cref="SKPdfGenerator"/>.
     /// </summary>
     /// <seealso cref="HtmlContainerInt"/>
     public sealed class SKHtmlContainer : IDisposable
@@ -325,11 +325,9 @@ namespace HtmlRendererCore.Skia
         /// Measures the bounds of box and children, recursively.
         /// </summary>
         /// <param name="g">Device context to draw</param>
-        public void PerformLayout(SKCanvas g)
+        public void PerformLayout()
         {
-            ArgChecker.AssertArgNotNull(g, "g");
-
-            using (var ig = new SKGraphicsAdapter(g))
+            using (var ig = new SKGraphicsAdapter())
             {
                 _htmlContainerInt.PerformLayout(ig);
             }

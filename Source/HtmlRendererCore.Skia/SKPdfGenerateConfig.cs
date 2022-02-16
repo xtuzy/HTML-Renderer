@@ -17,21 +17,21 @@ using System;
 namespace HtmlRendererCore.Skia
 {
     /// <summary>
-    /// The settings for generating PDF using <see cref="SKCanvasGenerator"/>
+    /// The settings for generating PDF using <see cref="SKPdfGenerator"/>
     /// </summary>
-    public sealed class SKCanvasGenerateConfig
+    public sealed class SKPdfGenerateConfig
     {
         #region Fields/Consts
 
         /// <summary>
         /// the page size to use for each page in the generated pdf
         /// </summary>
-        private SKSize _SKSize;
+        private SKSize _pageSize=new SKSize(595,842);
 
         /// <summary>
         /// if the page size is undefined this allow you to set manually the page size
         /// </summary>
-        //private SKSize _SKSize;
+        private SKSize _xSize;
 
         /// <summary>
         /// the orientation of each page of the generated pdf
@@ -64,18 +64,18 @@ namespace HtmlRendererCore.Skia
         /// <summary>
         /// the page size to use for each page in the generated pdf
         /// </summary>
-        public SKSize SKSize
+        public SKSize PageSize
         {
-            get { return _SKSize; }
-            set { _SKSize = value; }
+            get { return _pageSize; }
+            set { _pageSize = value; }
         }
 
         /// <summary>
         /// if the page size is undefined this allow you to set manually the page size
         /// </summary>
         public SKSize ManualSKSize {
-            get { return _SKSize; }
-            set { _SKSize = value; }
+            get { return _xSize; }
+            set { _xSize = value; }
         }
 
         /// <summary>

@@ -16,6 +16,7 @@
 using HtmlRendererCore.Skia.Adapters;
 using SkiaSharp;
 using System;
+using System.IO;
 using TheArtOfDev.HtmlRenderer.Core;
 using TheArtOfDev.HtmlRenderer.Core.Entities;
 using TheArtOfDev.HtmlRenderer.Core.Utils;
@@ -25,7 +26,7 @@ namespace HtmlRendererCore.Skia
     /// <summary>
     /// TODO:a add doc
     /// </summary>
-    public static class SKCanvasGenerator
+    public static class SKPdfGenerator
     {
         /// <summary>
         /// Adds a font mapping from <paramref name="fromFamily"/> to <paramref name="toFamily"/> iff the <paramref name="fromFamily"/> is not found.<br/>
@@ -69,13 +70,15 @@ namespace HtmlRendererCore.Skia
         /// <param name="stylesheetLoad">optional: can be used to overwrite stylesheet resolution logic</param>
         /// <param name="imageLoad">optional: can be used to overwrite image resolution logic</param>
         /// <returns>the generated image of the html</returns>
-        /*public static PdfDocument GeneratePdf(string html, SKSize SKSize, int margin = 20, CssData cssData = null, EventHandler<HtmlStylesheetLoadEventArgs> stylesheetLoad = null, EventHandler<HtmlImageLoadEventArgs> imageLoad = null)
+        public static void GeneratePdf(string filePath,string html, SKPdfGenerateConfig config, CssData cssData = null, EventHandler<HtmlStylesheetLoadEventArgs> stylesheetLoad = null, EventHandler<HtmlImageLoadEventArgs> imageLoad = null)
         {
-            var config = new PdfGenerateConfig();
-            config.SKSize = SKSize;
-            config.SetMargins(margin);
-            return GeneratePdf(html, config, cssData, stylesheetLoad, imageLoad);
-        }*/
+            var stream = SKFileWStream.OpenStream(filePath);
+            // create PDF document to render the HTML into
+            var document = SKDocument.CreatePdf(stream);
+
+            GeneratePdf(document,html, config, cssData, stylesheetLoad, imageLoad);
+            document.Close();
+        }
 
         /// <summary>
         /// Create PDF document from given HTML.<br/>
@@ -86,16 +89,11 @@ namespace HtmlRendererCore.Skia
         /// <param name="stylesheetLoad">optional: can be used to overwrite stylesheet resolution logic</param>
         /// <param name="imageLoad">optional: can be used to overwrite image resolution logic</param>
         /// <returns>the generated image of the html</returns>
-       /* public static PdfDocument GeneratePdf(string html, PdfGenerateConfig config, CssData cssData = null, EventHandler<HtmlStylesheetLoadEventArgs> stylesheetLoad = null, EventHandler<HtmlImageLoadEventArgs> imageLoad = null)
+        public static void GeneratePdf(SKDocument document,string html, SKPdfGenerateConfig config, CssData cssData = null, EventHandler<HtmlStylesheetLoadEventArgs> stylesheetLoad = null, EventHandler<HtmlImageLoadEventArgs> imageLoad = null)
         {
-            // create PDF document to render the HTML into
-            var document = new PdfDocument();
-
             // add rendered PDF pages to document
             AddPdfPages(document, html, config, cssData, stylesheetLoad, imageLoad);
-
-            return document;
-        }*/
+        }
 
         /// <summary>
         /// Create PDF pages from given HTML and appends them to the provided PDF document.<br/>
@@ -192,9 +190,9 @@ namespace HtmlRendererCore.Skia
             }
         }*/
 
-        public static void DrawPages(SKCanvas canvas,SKSize size, string html, SKCanvasGenerateConfig config, CssData cssData = null, EventHandler<HtmlStylesheetLoadEventArgs> stylesheetLoad = null, EventHandler<HtmlImageLoadEventArgs> imageLoad = null)
+        public static void AddPdfPages(SKDocument document, string html, SKPdfGenerateConfig config, CssData cssData = null, EventHandler<HtmlStylesheetLoadEventArgs> stylesheetLoad = null, EventHandler<HtmlImageLoadEventArgs> imageLoad = null)
         {
-            var SKSize = new SKSize(size.Width - config.MarginLeft - config.MarginRight, size.Height - config.MarginTop - config.MarginBottom);
+            var htmlPageSize = new SKSize(config.PageSize.Width - config.MarginLeft - config.MarginRight, config.PageSize.Height - config.MarginTop - config.MarginBottom);
 
             if (!string.IsNullOrEmpty(html))
             {
@@ -206,34 +204,32 @@ namespace HtmlRendererCore.Skia
                         container.ImageLoad += imageLoad;
 
                     container.Location = new SKPoint(config.MarginLeft, config.MarginTop);
-                    container.MaxSize = new SKSize(SKSize.Width, SKSize.Height);
+                    container.MaxSize = new SKSize(config.PageSize.Width, 0);
                     container.SetHtml(html, cssData);
-                    container.SKSize = SKSize;
+                    container.SKSize = config.PageSize;
                     container.MarginBottom = config.MarginBottom;
                     container.MarginLeft = config.MarginLeft;
                     container.MarginRight = config.MarginRight;
                     container.MarginTop = config.MarginTop;
 
                     // layout the HTML with the page width restriction to know how many pages are required
-                    container.PerformLayout(canvas);
-                    container.PerformPaint(canvas, SKRect.Empty);
+                    container.PerformLayout();
 
                     // while there is un-rendered HTML, create another PDF page and render with proper offset for the next page
-                    /*double scrollOffset = 0;
+                    double scrollOffset = 0;
                     while (scrollOffset > -container.ActualSize.Height)
                     {
-                        var page = new SKBitmap((int)size.Width,(int)size.Height);
-                      
-                        using (var g = new SKCanvas(page))
-                        {
-                            //g.IntersectClip(new SKRect(config.MarginLeft, config.MarginTop, SKSize.Width, SKSize.Height));
-                            g.ClipRect(new SKRect(0, 0, page.Width, page.Height));
+                        var canvas = document.BeginPage(config.PageSize.Width, config.PageSize.Height);
 
-                            container.ScrollOffset = new SKPoint(0, (float)scrollOffset);
-                            container.PerformPaint(g,SKRect.Empty);
-                        }
-                        scrollOffset -= SKSize.Height;
-                    }*/
+                        //g.IntersectClip(new SKRect(config.MarginLeft, config.MarginTop, SKSize.Width, SKSize.Height));
+                        canvas.ClipRect(new SKRect(0, 0, config.PageSize.Width, config.PageSize.Height));
+
+                        container.ScrollOffset = new SKPoint(0, (float)scrollOffset);
+                        container.PerformPaint(canvas, SKRect.Empty);
+
+                        scrollOffset -= htmlPageSize.Height;
+                        document.EndPage();
+                    }
 
                     // add web links and anchors
                     //HandleLinks(document, container, orgSKSize, SKSize);

@@ -18,6 +18,32 @@ namespace HtmlRendererCore.Skia.Adapters
         /// </summary>
         private static readonly SKCanvasAdapter _instance = new SKCanvasAdapter();
 
+        internal SKCanvasAdapter()
+        {
+            
+            AddFontFamilyMapping("monospace", "Courier New");
+            AddFontFamilyMapping("Helvetica", "Arial");
+            //Add font
+            if (!System.OperatingSystem.IsIOS())//seems ios can't get font
+            {
+                string fontsfolder =Environment.GetFolderPath(Environment.SpecialFolder.Fonts);
+                var fontFiles = Directory.EnumerateFiles(fontsfolder);
+                
+                foreach (var fontFile in fontFiles)
+                {
+                    try
+                    {
+                        if (!fontFile.Contains(".ttf"))
+                            continue;
+                        AddFontFamily(new SKPaintAdapter(SKTypeface.FromFile(fontFile),12));
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+        }
+
         #endregion
 
         /// <summary>
