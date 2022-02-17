@@ -61,7 +61,7 @@ namespace HtmlRendererCore.Skia.Adapters
         }
         SKPaint GetPaintFromPen(IRPen pen)
         {
-            var paint = new SKPaint() { IsAntialias = true };
+            var paint = new SKPaint() { IsAntialias = true};
 
             var penPaintAdapter = (SKPaintAdapter)pen;
             paint.StrokeWidth = (float)penPaintAdapter.PenWidth;
@@ -79,7 +79,7 @@ namespace HtmlRendererCore.Skia.Adapters
 
         public override void DrawPath(IRBrush brush, IRGraphicsPath path)
         {
-            using (var paint = GetPanitFromBrush(brush))
+            using (var paint = GetPaintFromBrush(brush))
             {
                 canvas.DrawPath(((SKPaintAdapter)path).ClosePath(), paint);
             }
@@ -89,7 +89,7 @@ namespace HtmlRendererCore.Skia.Adapters
         {
             using (SKPath path = new SKPath() { FillType = SKPathFillType.Winding })
             {
-                using (var paint = GetPanitFromBrush(brush))
+                using (var paint = GetPaintFromBrush(brush))
                 {
                     path.MoveTo((float)(points[0].X), (float)(points[0].Y));
                     for (var index = 1; index < points.Length; index++)
@@ -102,7 +102,7 @@ namespace HtmlRendererCore.Skia.Adapters
                 }
             }
         }
-        SKPaint GetPanitFromBrush(IRBrush brush)
+        SKPaint GetPaintFromBrush(IRBrush brush)
         {
             var paint = new SKPaint() { IsAntialias = true };
 
@@ -121,6 +121,13 @@ namespace HtmlRendererCore.Skia.Adapters
         }
         public override void DrawRectangle(IRPen pen, double x, double y, double width, double height)
         {
+            var adj = pen.PenWidth;
+            if (Math.Abs(adj % 2 - 1) < .1)
+            {
+                x += .5;
+                y += .5;
+            }
+
             using (var paint = GetPaintFromPen(pen))
             {
                 canvas.DrawRect((float)x, (float)y, (float)width, (float)height, paint);
@@ -129,7 +136,7 @@ namespace HtmlRendererCore.Skia.Adapters
 
         public override void DrawRectangle(IRBrush brush, double x, double y, double width, double height)
         {
-            using (var paint = GetPanitFromBrush(brush))
+            using (var paint = GetPaintFromBrush(brush))
             {
                 canvas.DrawRect((float)x, (float)y, (float)width, (float)height, paint);
             }
@@ -137,7 +144,8 @@ namespace HtmlRendererCore.Skia.Adapters
 
         public override void DrawString(string str, IRFont font, RColor color, RPoint point, RSize size, bool rtl)
         {
-            var paint = ((SKPaintAdapter)font).Paint;
+            var fontAdapter = ((SKPaintAdapter)font);
+            var paint = fontAdapter.Paint;
 
             var brushPaintAdapter = ((SKPaintAdapter)_adapter.GetSolidBrush(color));
             switch (brushPaintAdapter.GetBrushType)
@@ -151,7 +159,9 @@ namespace HtmlRendererCore.Skia.Adapters
                     break;
             }
 
-            canvas.DrawText(str, (float)point.X, (float)(point.Y + font.FontSize), paint);
+            //canvas.DrawText(str, (float)point.X, (float)(point.Y + font.FontSize), paint);
+            var centerYtoBaseline = (paint.FontMetrics.Descent-paint.FontMetrics.Ascent)/2-paint.FontMetrics.Descent;
+            canvas.DrawText(str, (float)point.X, (float)(point.Y+fontAdapter.FontHeight/2+centerYtoBaseline), paint);
         }
 
         public override IRGraphicsPath GetGraphicsPath()
@@ -167,7 +177,7 @@ namespace HtmlRendererCore.Skia.Adapters
         public override RSize MeasureString(string str, IRFont font)
         {
             var fontAdapter = ((SKPaintAdapter)font);
-            var size = fontAdapter.Paint.MeasureText(str);
+            var width = fontAdapter.Paint.MeasureText(str);
 
             /*if (font.FontHeight < 0)
             {
@@ -175,8 +185,8 @@ namespace HtmlRendererCore.Skia.Adapters
                 var descent = fontAdapter.Paint.FontMetrics.Descent;
                 fontAdapter.UnderlineOffset = (int)Math.Round((height - descent + 1f));
             }*/
-
-            return Utils.Convert(new SKSize(size, (float)fontAdapter.FontSize));
+            //return Utils.Convert(new SKSize(width, (float)font.FontHeight));
+            return Utils.Convert(new SKSize(width, (float)fontAdapter.FontHeight));
         }
 
         public override void MeasureString(string str, IRFont font, double maxWidth, out int charFit, out double charFitWidth)
@@ -212,7 +222,13 @@ namespace HtmlRendererCore.Skia.Adapters
 
         public override void PushClipExclude(RRect rect)
         {
-            throw new NotImplementedException();
+            var path = new SKPath();
+            path.AddRect(Utils.Convert(_clipStack.Peek()));
+            path.AddRect(Utils.Convert(rect));
+            path.Close();
+
+            _clipStack.Push(_clipStack.Peek());
+            canvas.ClipPath(path);
         }
 
         public override void ReturnPreviousSmoothingMode(object prevMode)

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using HtmlRendererCore.Demo.Console;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,7 +29,8 @@ namespace HtmlRendererCore.Demo.WPF
             htmlLabel.Text = SampleHtmlLabelText;
             htmlLabel.AutoSizeHeightOnly = true;
 
-            htmlPanel.Text = SampleHtmlPanelText;
+            //htmlPanel.Text = SampleHtmlPanelText;
+            DrawPagesTest();
         }
 
         /// <summary>
@@ -54,6 +57,28 @@ namespace HtmlRendererCore.Demo.WPF
                        "<br/>Click me to change my <code>Text</code> property.";*/
                 var text = File.ReadAllText("TestSamples/01.Header.htm");
                 return text;
+            }
+        }
+
+        void DrawPagesTest()
+        {
+            /*var html = "This is an <b>HtmlLabel</b> on transparent background with <span style=\"color: red\">colors</span> and links: " +
+                               "<a href=\"http://htmlrenderer.codeplex.com/\">HTML Renderer</a>";*/
+            SamplesLoader.Init("Windows", "11");
+            Directory.CreateDirectory(@"result\TestSamples");
+           /* foreach (var sample in SamplesLoader.TestSamples)
+            {
+                var html = sample.Html;
+            }*/
+            Directory.CreateDirectory(@"result\Samples");
+            foreach (var sample in SamplesLoader.ShowcaseSamples)
+            {
+                var html = sample.Html;
+                if (sample.Name.Contains("Table"))
+                {
+                    htmlPanel.Text = html;
+                    break;
+                }
             }
         }
     }

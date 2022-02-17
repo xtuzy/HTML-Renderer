@@ -10,8 +10,10 @@
     Width="800"
     Height="450"
     mc:Ignorable="d">
-    <StackPanel>
-        <wpf:HtmlLabel x:Name="htmlLabel" />
-        <wpf:HtmlPanel x:Name="htmlPanel" />
-    </StackPanel>
+    <ScrollViewer>
+        <StackPanel>
+            <wpf:HtmlLabel x:Name="htmlLabel" />
+            <wpf:HtmlPanel x:Name="htmlPanel" />
+        </StackPanel>
+    </ScrollViewer>
 </Window>

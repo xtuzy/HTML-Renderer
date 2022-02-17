@@ -39,8 +39,11 @@ namespace HtmlRendererCore.Skia.Adapters
             this.Font = font;
             FontName = Font.FamilyName;
             FontSize = fontSize;
+            FontHeight = (float)(Paint.FontMetrics.Descent - Paint.FontMetrics.Ascent);
 
-            UnderlineOffset = Paint.FontMetrics.UnderlinePosition == null ? -Paint.FontMetrics.Ascent : -Paint.FontMetrics.Ascent + Paint.FontMetrics.UnderlinePosition.Value;
+            //UnderlineOffset = Paint.FontMetrics.UnderlinePosition == null ? -Paint.FontMetrics.Ascent : -Paint.FontMetrics.Ascent + Paint.FontMetrics.UnderlinePosition.Value;
+            UnderlineOffset = FontHeight - Paint.FontMetrics.Descent + 0.5f;
+            BaselineOffset = -Paint.FontMetrics.Ascent;
         }
 
         public SKPath Path;
@@ -130,7 +133,7 @@ namespace HtmlRendererCore.Skia.Adapters
 
         public double FontSize { get; set; }
 
-        public double FontHeight => FontSize;
+        public double FontHeight { get; set; }
 
         public double UnderlineOffset { get; set; }
 
@@ -144,27 +147,43 @@ namespace HtmlRendererCore.Skia.Adapters
             return WhitespaceWidth;
         }
 
+        public float BaselineOffset { get; set; }
+
         #endregion
 
         #region IRPath
+        float lastX;
+        float lastY;
         public void StartPath(double x, double y)
         {
             Path.MoveTo((float)x, (float)y);
+            lastX = (float)x;
+            lastY = (float)y;
         }
         public void LineTo(double x, double y)
         {
+            //Path.MoveTo((float)lastX, (float)lastY);
             Path.LineTo((float)x, (float)y);
+            lastY = (float)x;
+            lastY = (float)y;
         }
         public void ArcTo(double x, double y, double size, IRGraphicsPath.Corner corner)
         {
-            float left = (float)(x - (corner == IRGraphicsPath.Corner.TopRight || corner == IRGraphicsPath.Corner.BottomRight ? size : 0));
-            float top = (float)(y - (corner == IRGraphicsPath.Corner.BottomLeft || corner == IRGraphicsPath.Corner.BottomRight ? size : 0));
-            Path.AddArc(SKRect.Create(left, top, (float)size * 2, (float)size * 2), GetStartAngle(corner), 90);
+           
+            float left = (float)(Math.Min(x,lastX) - (corner == IRGraphicsPath.Corner.TopRight || corner == IRGraphicsPath.Corner.BottomRight ? size : 0));
+            float top = (float)(Math.Min(y,lastY) - (corner == IRGraphicsPath.Corner.BottomLeft || corner == IRGraphicsPath.Corner.BottomRight ? size : 0));
+            //Path.ArcTo(SKRect.Create(left, top, (float)size * 2, (float)size * 2), GetStartAngle(corner),90, true);
+            //Path.MoveTo((float)(left+size), (float)(top+size));
+            Path.AddArc(SKRect.Create(left, top, (float)size*2, (float)size*2), GetStartAngle(corner),90);
+            //Path.ArcTo(left, top,(float)x,(float)y,(float)size);
+            //Path.MoveTo((float)x, (float)y);
+            lastX = (float)x;
+            lastY = (float)y;
         }
 
         public SKPath ClosePath()
         {
-            Path.Close();
+            //Path.Close();
             return Path;
         }
         /// <summary>

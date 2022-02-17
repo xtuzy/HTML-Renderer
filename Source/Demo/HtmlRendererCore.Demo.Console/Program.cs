@@ -14,8 +14,13 @@ void DrawPagesTest()
      Directory.CreateDirectory(@"result\TestSamples");
     foreach(var sample in SamplesLoader.TestSamples)
     {
+        //if (!sample.Name.Contains("RTL"))continue;
+        //if (!sample.Name.Contains("Language"))continue;
+        //if (!sample.Name.Contains("Border"))continue;
         if (sample.Name.Contains("image") || sample.Name.Contains("Image"))
             continue;
+        //if (sample.Name.Contains("Font"))
+        //    continue;
         var html = sample.Html;
         try
         {
