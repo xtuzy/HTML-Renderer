@@ -78,7 +78,8 @@ namespace TheArtOfDev.HtmlRenderer.Core.Utils
         {
             g.DrawRectangle(g.GetPen(RColor.LightGray), r.Left + 3, r.Top + 3, 13, 14);
             var image = htmlContainer.Adapter.GetLoadingImage();
-            g.DrawImage(image, new RRect(r.Left + 4, r.Top + 4, image.Width, image.Height));
+            if(image != null)
+                g.DrawImage(image, new RRect(r.Left + 4, r.Top + 4, image.Width, image.Height));
         }
 
         /// <summary>
