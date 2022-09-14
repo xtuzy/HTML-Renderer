@@ -1,5 +1,11 @@
 HTML Renderer [![Build status](https://ci.appveyor.com/api/projects/status/cm8xpf8ebt3hyi3e)](https://ci.appveyor.com/project/ArthurHub/html-renderer)
 =============
+## Maui Support 
+Base on @ManniAT HtmlRendererCore, i add a simple skia support, add a HtmlLabel in Maui, you can see Demo learn how to use.
+It have some limitations:
+- https://github.com/xtuzy/HTML-Renderer/issues/1
+
+
 ## .net 5 version of HtmlRendererCore and HtmlRendererCore.WPF added
 * I didn't add nuget build targets
 * included fix for https://github.com/ArthurHub/HTML-Renderer/issues/94

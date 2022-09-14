@@ -3,6 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
+    <Version>1.5.0</Version>
+    <PackageProjectUrl>https://github.com/xtuzy/HTML-Renderer/tree/supportskiasharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/xtuzy/HTML-Renderer/tree/supportskiasharp</RepositoryUrl>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Yang.HtmlRendererCore</Title>
+    <PackageId>Yang.HtmlRendererCore</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
