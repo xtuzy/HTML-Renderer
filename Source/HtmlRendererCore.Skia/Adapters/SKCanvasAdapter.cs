@@ -3,13 +3,14 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using TheArtOfDev.HtmlRenderer.Adapters;
 using TheArtOfDev.HtmlRenderer.Adapters.Entities;
 
 namespace HtmlRendererCore.Skia.Adapters
 {
-    internal class SKCanvasAdapter : RAdapter
+    public class SKCanvasAdapter : RAdapter
     {
         #region Fields and Consts
 
@@ -23,24 +24,34 @@ namespace HtmlRendererCore.Skia.Adapters
             
             AddFontFamilyMapping("monospace", "Courier New");
             AddFontFamilyMapping("Helvetica", "Arial");
+            if (System.OperatingSystem.IsAndroid())
+                AddFontFamilyMapping("Segue UI", "Robote");
+            if (System.OperatingSystem.IsIOS() || System.OperatingSystem.IsMacCatalyst() || System.OperatingSystem.IsMacOS())
+                AddFontFamilyMapping("Segue UI", "Helvetica");
+
             //Add font
-            if (!System.OperatingSystem.IsIOS())//seems ios can't get font
+            //if (!System.OperatingSystem.IsIOS())//seems ios can't get font
+            //{
+            //    string fontsfolder =Environment.GetFolderPath(Environment.SpecialFolder.Fonts);
+            //    var fontFiles = Directory.EnumerateFiles(fontsfolder);
+            //    foreach (var fontFile in fontFiles)
+            //    {
+            //        try
+            //        {
+            //            if (!fontFile.Contains(".ttf"))
+            //                continue;
+            //            AddFontFamily(new SKPaintAdapter(SKTypeface.FromFile(fontFile),12));
+            //        }
+            //        catch
+            //        {
+            //        }
+            //    }
+            //}
+            //使用Skia读取系统字体
+            foreach (var fontName in SKFontManager.Default.FontFamilies)
             {
-                string fontsfolder =Environment.GetFolderPath(Environment.SpecialFolder.Fonts);
-                var fontFiles = Directory.EnumerateFiles(fontsfolder);
-                
-                foreach (var fontFile in fontFiles)
-                {
-                    try
-                    {
-                        if (!fontFile.Contains(".ttf"))
-                            continue;
-                        AddFontFamily(new SKPaintAdapter(SKTypeface.FromFile(fontFile),12));
-                    }
-                    catch
-                    {
-                    }
-                }
+                //var skTypeface = SKFontManager.Default.MatchFamily(fontName);
+                AddFontFamily(new SKPaintAdapter(fontName));
             }
         }
 
@@ -65,6 +76,7 @@ namespace HtmlRendererCore.Skia.Adapters
             switch (style)
             {
                 case RFontStyle.Regular:
+                    fontStyle = SKFontStyle.Normal;
                     break;
                 case RFontStyle.Bold:
                     fontStyle = SKFontStyle.Bold;
@@ -79,6 +91,14 @@ namespace HtmlRendererCore.Skia.Adapters
             }
 
             var typeface = SKTypeface.FromFamilyName(family, fontStyle);
+            if(typeface == null || typeface.FamilyName != family)//Skia会使用默认的字体替代找不到的,所以得到的字体不一致
+            {
+                var customTypeface = CustomFontFamilyManager.GetFont(family);
+                if (customTypeface != null)
+                    typeface = customTypeface;
+                else
+                    typeface = null;
+            }
             return new SKPaintAdapter(typeface, (int)size);
         }
 

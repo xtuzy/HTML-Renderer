@@ -7,12 +7,13 @@ using SkiaSharp;
 
 namespace HtmlRendererCore.Skia.Adapters
 {
-    internal class SKPaintAdapter : IRBrush, IRPen, IRGraphicsPath, IRImage, IRFontFamily, IRFont
+    public class SKPaintAdapter : IRBrush, IRPen, IRGraphicsPath, IRImage, IRFontFamily, IRFont
     {
         public SKPaint Paint { get; private set; }
 
         public SKBitmap Image;
         /// <summary>
+        /// 匹配IRImage接口.
         /// for image,don't create paint
         /// </summary>
         /// <param name="canvas"></param>
@@ -22,8 +23,14 @@ namespace HtmlRendererCore.Skia.Adapters
             this.Image = image;
         }
 
+        public SKPaintAdapter(string fontFamily)
+        {
+            this.FontName = fontFamily;
+        }
+
         public SKTypeface Font;
         /// <summary>
+        /// 匹配IRFont接口.
         /// for font and font color
         /// </summary>
         /// <param name="font"></param>
@@ -37,7 +44,6 @@ namespace HtmlRendererCore.Skia.Adapters
                 TextSize = fontSize,
             };
             this.Font = font;
-            FontName = Font.FamilyName;
             FontSize = fontSize;
             FontHeight = (float)(Paint.FontMetrics.Descent - Paint.FontMetrics.Ascent);
 
@@ -48,6 +54,7 @@ namespace HtmlRendererCore.Skia.Adapters
 
         public SKPath Path;
         /// <summary>
+        /// 匹配IRGraphicsPath接口
         /// for path,don't create paint
         /// </summary>
         public SKPaintAdapter()
@@ -58,6 +65,7 @@ namespace HtmlRendererCore.Skia.Adapters
         public object Brush { get; private set; }
         public BrushType GetBrushType { get; private set; }
         /// <summary>
+        /// 匹配IRBrush接口
         /// for brush and pen,don't create paint
         /// </summary>
         public SKPaintAdapter(object brush, BrushType brushType = BrushType.SolidColor)
@@ -80,7 +88,6 @@ namespace HtmlRendererCore.Skia.Adapters
             get => penWidth;
             set => penWidth = value;
         }
-
 
         public SKPathEffect PathEffect {get;private set;}
         public RDashStyle DashStyle
@@ -128,8 +135,11 @@ namespace HtmlRendererCore.Skia.Adapters
         public double ImageHeight => Image.Height;
         #endregion
 
-        #region IRFont
+        #region IRFontFamily
         public string FontName { get; set; }
+        #endregion
+
+        #region IRFont
 
         public double FontSize { get; set; }
 
@@ -151,7 +161,7 @@ namespace HtmlRendererCore.Skia.Adapters
 
         #endregion
 
-        #region IRPath
+        #region IRGraphicsPath
         float lastX;
         float lastY;
         public void StartPath(double x, double y)
@@ -212,6 +222,7 @@ namespace HtmlRendererCore.Skia.Adapters
             return startAngle;
         }
         #endregion
+
         public void Dispose()
         {
             PathEffect?.Dispose();

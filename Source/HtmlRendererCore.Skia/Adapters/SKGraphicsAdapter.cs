@@ -8,7 +8,7 @@ using TheArtOfDev.HtmlRenderer.Adapters.Entities;
 
 namespace HtmlRendererCore.Skia.Adapters
 {
-    internal class SKGraphicsAdapter : RGraphics
+    public class SKGraphicsAdapter : RGraphics
     {
         SKCanvas canvas;
         /// <summary>
@@ -194,7 +194,6 @@ namespace HtmlRendererCore.Skia.Adapters
             throw new NotImplementedException();
         }
 
-
         /// <summary>
         /// The clipping bound stack as clips are pushed/poped to/from the graphics
         /// </summary>
@@ -204,8 +203,6 @@ namespace HtmlRendererCore.Skia.Adapters
         /// The suspended clips
         /// </summary>
         private Stack<RRect> _suspendedClips = new Stack<RRect>();
-
-
 
         public override void PopClip()
         {

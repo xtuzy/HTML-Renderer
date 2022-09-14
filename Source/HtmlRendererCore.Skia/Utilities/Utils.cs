@@ -21,7 +21,7 @@ namespace HtmlRendererCore.Skia.Utilities
     /// <summary>
     /// Utilities for converting WinForms entities to HtmlRenderer core entities.
     /// </summary>
-    internal static class Utils
+    public static class Utils
     {
         /// <summary>
         /// Convert from WinForms point to core point.
