@@ -21,14 +21,6 @@ namespace HtmlRendererCore.Skia.Adapters
 
         internal SKCanvasAdapter()
         {
-            
-            AddFontFamilyMapping("monospace", "Courier New");
-            AddFontFamilyMapping("Helvetica", "Arial");
-            if (System.OperatingSystem.IsAndroid())
-                AddFontFamilyMapping("Segue UI", "Robote");
-            if (System.OperatingSystem.IsIOS() || System.OperatingSystem.IsMacCatalyst() || System.OperatingSystem.IsMacOS())
-                AddFontFamilyMapping("Segue UI", "Helvetica");
-
             //Add font
             //if (!System.OperatingSystem.IsIOS())//seems ios can't get font
             //{
@@ -89,9 +81,9 @@ namespace HtmlRendererCore.Skia.Adapters
                 case RFontStyle.Strikeout:
                     break;
             }
-
+            
             var typeface = SKTypeface.FromFamilyName(family, fontStyle);
-            if(typeface == null || typeface.FamilyName != family)//Skia会使用默认的字体替代找不到的,所以得到的字体不一致
+            if (typeface == null || typeface.FamilyName != family)//Skia会使用默认的字体替代找不到的,所以得到的字体不一致
             {
                 var customTypeface = CustomFontFamilyManager.GetFont(family);
                 if (customTypeface != null)
@@ -102,6 +94,13 @@ namespace HtmlRendererCore.Skia.Adapters
             return new SKPaintAdapter(typeface, (int)size);
         }
 
+        /// <summary>
+        /// 存在IRFontFamily说明SKFontManager和自定义字体管理器中有该字体
+        /// </summary>
+        /// <param name="family"></param>
+        /// <param name="size"></param>
+        /// <param name="style"></param>
+        /// <returns></returns>
         protected override IRFont CreateFontInt(IRFontFamily family, double size, RFontStyle style)
         {
             return CreateFontInt(family.FontName, size, style);

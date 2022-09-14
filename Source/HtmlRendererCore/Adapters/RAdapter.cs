@@ -10,7 +10,6 @@
 // - Sun Tsu,
 // "The Art of War"
 
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -70,7 +69,6 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         private IRImage _errorImage;
 
         #endregion
-
 
         /// <summary>
         /// Init.
@@ -327,7 +325,6 @@ namespace TheArtOfDev.HtmlRenderer.Adapters
         {
             return CreateFontInt(family, size, style);
         }
-
 
         #region Private/Protected methods
 

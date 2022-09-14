@@ -47,7 +47,6 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
 
         #endregion
 
-
         /// <summary>
         /// Init.
         /// </summary>
@@ -110,11 +109,14 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         /// <returns>cached font instance</returns>
         public IRFont GetCachedFont(string family, double size, RFontStyle style)
         {
+            //先尝试从缓存获取字体
             var font = TryGetFont(family, size, style);
             if (font == null)
             {
+                //如果没有这个字体的记录
                 if (!_existingFontFamilies.ContainsKey(family))
                 {
+                    //从可替换字体中获取
                     string mappedFamily;
                     if (_fontsMapping.TryGetValue(family, out mappedFamily))
                     {
@@ -136,7 +138,6 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
             }
             return font;
         }
-
 
         #region Private methods
 

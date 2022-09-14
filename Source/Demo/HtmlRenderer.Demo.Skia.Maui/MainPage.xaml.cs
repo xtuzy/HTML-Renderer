@@ -13,7 +13,7 @@
             htmlLabel.AutoSizeHeightOnly = true;
             //htmlLabel.BackgroundColor = Colors.AliceBlue;
             htmlLabel.Opacity = 0.5;
-            htmlLabel.Text = "这里是 an <b>HtmlLabel</b> on transparent background with <span style=\"color: red\">colors</span> and links: " +
+            htmlLabel.Text = "<span style=\"color: red;font-family: FangSong\">这里是</span> an <b>HtmlLabel</b> on transparent background with <span style=\"color: red\">colors</span> and links: " +
                        "<a href=\"http://htmlrenderer.codeplex.com/\">HTML Renderer</a>";
             htmlPanel.AutoSizeHeightOnly = true;
             LoadMauiAsset().ContinueWith(async (html) =>

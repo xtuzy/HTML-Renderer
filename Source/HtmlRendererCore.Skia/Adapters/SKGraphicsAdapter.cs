@@ -146,7 +146,7 @@ namespace HtmlRendererCore.Skia.Adapters
         {
             var fontAdapter = ((SKPaintAdapter)font);
             var paint = fontAdapter.Paint;
-
+            var containTextInFont = paint.ContainsGlyphs(str);
             var brushPaintAdapter = ((SKPaintAdapter)_adapter.GetSolidBrush(color));
             switch (brushPaintAdapter.GetBrushType)
             {
