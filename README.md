@@ -1,14 +1,21 @@
 HTML Renderer [![Build status](https://ci.appveyor.com/api/projects/status/cm8xpf8ebt3hyi3e)](https://ci.appveyor.com/project/ArthurHub/html-renderer)
 =============
-## Maui Support 
+## Maui Support by @xtuzy
 Base on @ManniAT HtmlRendererCore, i add a simple skia support, add a HtmlLabel in Maui, you can see Demo learn how to use.
-It have some limitations:
-- https://github.com/xtuzy/HTML-Renderer/issues/1
+### <img src="https://www.nuget.org/Content/gallery/img/logo-header.svg" width="10%">
+- [Yang.HtmlRendererCore](https://www.nuget.org/packages/Yang.HtmlRendererCore/)
+- [Yang.HtmlRendererCore.Skia](https://www.nuget.org/packages/Yang.HtmlRendererCore.Skia/) Support simple Html to Pdf
+- [Yang.HtmlRendererCore.Skia.Maui](https://www.nuget.org/packages/Yang.HtmlRendererCore.Skia.Maui/) Support HtmlLabel show simple Html
+### Limitations:
+- [Can't auto fit font for different language](https://github.com/xtuzy/HTML-Renderer/issues/1)
 
+---
 
-## .net 5 version of HtmlRendererCore and HtmlRendererCore.WPF added
+## .net 5 version of HtmlRendererCore and HtmlRendererCore.WPF added by @ManniAT
 * I didn't add nuget build targets
 * included fix for https://github.com/ArthurHub/HTML-Renderer/issues/94
+
+---
 
 ## Help Wanted
 * Looking for a contributor(s) to take this project forward as I'm unable to continue supporting it.
