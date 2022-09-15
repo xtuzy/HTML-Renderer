@@ -30,7 +30,10 @@ namespace HtmlRendererCore.Demo.WPF
             htmlLabel.AutoSizeHeightOnly = true;
 
             //htmlPanel.Text = SampleHtmlPanelText;
-            DrawPagesTest();
+            button.Click += (sender, e) =>
+            {
+                DrawPagesTest();
+            };
         }
 
         /// <summary>
@@ -74,7 +77,7 @@ namespace HtmlRendererCore.Demo.WPF
             foreach (var sample in SamplesLoader.ShowcaseSamples)
             {
                 var html = sample.Html;
-                if (sample.Name.Contains("Table"))
+                if (sample.Name.Contains("Text"))
                 {
                     htmlPanel.Text = html;
                     break;

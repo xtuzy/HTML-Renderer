@@ -10,6 +10,7 @@
 // - Sun Tsu,
 // "The Art of War"
 
+using Microsoft.Maui.Platform;
 using SkiaSharp.Views.Maui;
 using SkiaSharp.Views.Maui.Controls;
 using System.ComponentModel;
@@ -260,6 +261,7 @@ namespace HtmlRendererCore.Skia.Maui
         protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
         {
             base.OnPaintSurface(e);
+            e.Surface.Canvas.Scale((float)DeviceDisplay.MainDisplayInfo.Density);
             OnRender(e.Surface.Canvas, e.Info.Size);
         }
 
@@ -293,7 +295,7 @@ namespace HtmlRendererCore.Skia.Maui
             {
                 //var windows = Window.GetWindow(this);
                 //if (windows != null)
-                //{
+                //{ 
                 //    //adjust render location to round point so we won't get anti-alias smugness
                 //    var wPoint = TranslatePoint(new Point(0, 0), windows);
                 //    wPoint.Offset(-(int)wPoint.X, -(int)wPoint.Y);

@@ -12,6 +12,11 @@
     mc:Ignorable="d">
     <ScrollViewer>
         <StackPanel>
+            <Button
+                x:Name="button"
+                Width="100"
+                Height="50"
+                Content="Show Panel" />
             <wpf:HtmlLabel x:Name="htmlLabel" />
             <wpf:HtmlPanel x:Name="htmlPanel" />
         </StackPanel>

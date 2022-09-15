@@ -38,7 +38,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HtmlRendererCore.Skia", "Ht
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HtmlRendererCore.Skia.Maui", "HtmlRendererCore.Skia.Maui\HtmlRendererCore.Skia.Maui.csproj", "{E67838B7-D6AF-4CB1-BEA4-EC23CFF730EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlRenderer.Demo.Skia.Maui", "Demo\HtmlRenderer.Demo.Skia.Maui\HtmlRenderer.Demo.Skia.Maui.csproj", "{A8A892AE-8A1E-4B85-98CC-694D9D39E5E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HtmlRenderer.Demo.Skia.Maui", "Demo\HtmlRenderer.Demo.Skia.Maui\HtmlRenderer.Demo.Skia.Maui.csproj", "{A8A892AE-8A1E-4B85-98CC-694D9D39E5E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -190,7 +190,6 @@ Global
 		{E67838B7-D6AF-4CB1-BEA4-EC23CFF730EB}.Debug|x86.Deploy.0 = Debug|Any CPU
 		{E67838B7-D6AF-4CB1-BEA4-EC23CFF730EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E67838B7-D6AF-4CB1-BEA4-EC23CFF730EB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E67838B7-D6AF-4CB1-BEA4-EC23CFF730EB}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{E67838B7-D6AF-4CB1-BEA4-EC23CFF730EB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E67838B7-D6AF-4CB1-BEA4-EC23CFF730EB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E67838B7-D6AF-4CB1-BEA4-EC23CFF730EB}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU

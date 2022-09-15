@@ -6,38 +6,25 @@
     xmlns:html="clr-namespace:HtmlRendererCore.Skia.Maui;assembly=HtmlRendererCore.Skia.Maui">
 
     <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25"
-            VerticalOptions="Center">
-
-            <Image
-                HeightRequest="200"
-                HorizontalOptions="Center"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                Source="dotnet_bot.png" />
-            <html:HtmlLabel x:Name="htmlLabel" />
-            <html:HtmlLabel x:Name="htmlPanel" />
-            <Label
-                FontSize="32"
-                HorizontalOptions="Center"
-                SemanticProperties.HeadingLevel="Level1"
-                Text="Hello, World!" />
-
-            <Label
-                FontSize="18"
-                HorizontalOptions="Center"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                SemanticProperties.HeadingLevel="Level2"
-                Text="Welcome to .NET Multi-platform App UI" />
-
-            <Button
-                x:Name="CounterBtn"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Text="Click me" />
-
+        <VerticalStackLayout x:Name="stackLayout" BackgroundColor="AliceBlue">
+            <HorizontalStackLayout BackgroundColor="Gray">
+                <Button
+                    x:Name="CounterBtn"
+                    Clicked="OnCounterClicked"
+                    Text="Show Panel" />
+                <Button
+                    x:Name="manyLabelButton"
+                    Clicked="ManyLabelButton_Clicked"
+                    Text="Many Label" />
+            </HorizontalStackLayout>
+            <html:HtmlLabel
+                x:Name="htmlLabel"
+                BackgroundColor="Coral"
+                HorizontalOptions="Center" />
+            <html:HtmlLabel
+                x:Name="htmlPanel"
+                BackgroundColor="Pink"
+                HorizontalOptions="Center" />
         </VerticalStackLayout>
     </ScrollView>
 
